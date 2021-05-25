@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "siteName": {
@@ -318,7 +318,7 @@
           "name": "web",
           "type": "sourcecontrols",
           "location": "[resourceGroup().location]",
-          "apiVersion": "2015-08-01",
+          "apiVersion": "2018-11-01",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
             "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'))]"
@@ -342,12 +342,13 @@
         "displayName": "MySQLAzure"
       },
       "properties": {
+        "createMode": "Default",
         "version": "[parameters('mysqlVersion')]",
         "administratorLogin": "[parameters('administratorLogin')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageProfile": {
           "storageMB": "[parameters('databaseSkuSizeMB')]",
-          "backupRetentionDays": "7",
+          "backupRetentionDays": 7,
           "geoRedundantBackup": "Disabled"
         },
         "sslEnforcement": "Disabled"

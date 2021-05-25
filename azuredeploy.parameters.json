@@ -3,34 +3,34 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "siteName": {
-      "value": null
+      "value": "itlrcpoc4"
     },
     "administratorLogin": {
-      "value": null
+      "value": "i2admin"
     },
     "administratorLoginPassword": {
-      "value": null
+      "value": "pocPassword!"
     },
     "redcapAppZip": {
-      "value": null
+      "value": "https://generali2wustldiag.blob.core.windows.net/temp/redcap9.5.5.zip"
     },
     "fromEmailAddress": {
-      "value": null
+      "value": "redcap@wustl.edu"
     },
     "smtpFQDN": {
-      "value": null
+      "value": "rsmtp.wustl.edu"
     },
     "smtpUser": {
-      "value": null
+      "value": "null"
     },
     "smtpPassword": {
-      "value": null
+      "value": "null"
     },
     "smtpPort": {
       "value": 587
     },
     "skuName": {
-      "value": "S1"
+      "value": "P2"
     },
     "skuCapacity": {
       "value": 1
@@ -54,13 +54,13 @@
       "value": "Standard_LRS"
     },
     "storageContainerName": {
-      "value": "redcap"
+      "value": "itlredcappoc"
     },
     "repoURL": {
-      "value": "https://github.com/vanderbilt-redcap/redcap-azure.git"
+      "value": "https://github.com/i2-wustl/azure-redcap-paas.git"
     },
     "branch": {
-      "value": "master"
+      "value": "release/poc"
     }
   }
 }
