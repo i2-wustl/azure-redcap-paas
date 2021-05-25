@@ -75,7 +75,10 @@
         "P1",
         "P2",
         "P3",
-        "P4"
+        "P4",
+        "P1V2",
+        "P2V2",
+        "P3V3"
       ],
       "metadata": {
         "description": "Describes plan's pricing tier and capacity - this can be changed after deployment. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
@@ -202,7 +205,7 @@
       "name": "[variables('storageName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2016-01-01",
+      "apiVersion": "2021-01-01",
       "sku": {
         "name": "[parameters('storageType')]"
       },
@@ -213,7 +216,7 @@
       "kind": "Storage"
     },
     {
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-02-01",
       "name": "[variables('hostingPlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",

@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "siteName": {
-      "value": "itlrcpoc4"
+      "value": "itlrcpoc5"
     },
     "administratorLogin": {
       "value": "i2admin"
@@ -30,7 +30,7 @@
       "value": 587
     },
     "skuName": {
-      "value": "P2"
+      "value": "P2V2"
     },
     "skuCapacity": {
       "value": 1
