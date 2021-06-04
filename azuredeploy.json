@@ -246,9 +246,10 @@
       "properties": {
         "name": "[variables('webSiteName')]",
         "serverFarmId": "[variables('hostingPlanName')]",
+        "httpsOnly": true,
         "siteConfig": {
           "phpVersion": "7.3",
-          "alwaysOn": true,
+          "alwaysOn": true,        
           "connectionStrings": [
             {
               "name": "defaultConnection",
