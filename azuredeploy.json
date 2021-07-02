@@ -186,18 +186,18 @@
   },
   "variables": {
     "siteName": "[replace(parameters('siteName'), ' ', '')]",
-    "databaseName": "[concat(variables('siteName'), '_db')]",
-    "serverName": "[concat(variables('siteName'), uniqueString(resourceGroup().id))]",
-    "hostingPlanName": "[concat(variables('siteName'), '_serviceplan')]",
+    "databaseName": "[concat(replace(variables('siteName'), '-', '_'), '_db')]",
+    "serverName": "[concat(variables('siteName'), '-mysql')]", // uniqueString(resourceGroup().id))]",
+    "hostingPlanName": "[concat(variables('siteName'), '-serviceplan')]",
     "sendgridAccountName": "[concat(variables('siteName'), '_sendgrid')]",
-    "webSiteName": "[concat(variables('siteName'), uniqueString(resourceGroup().id))]",
+    "webSiteName": "[concat(variables('siteName'), '-web')]", // uniqueString(resourceGroup().id))]",
     "tierSymbol": {
       "Basic": "B",
       "GeneralPurpose": "GP",
       "MemoryOptimized": "MO"
     },
     "databaseForMySqlSku": "[concat(variables('tierSymbol')[parameters('databaseForMySqlTier')], '_', parameters('databaseForMySqlFamily'), '_', parameters('databaseForMySqlCores'))]",
-    "storageName": "[concat('storage', uniqueString(resourceGroup().id))]",
+    "storageName": "[concat(replace(replace(variables('siteName'), '-', ''), '_', ''), 'storage')]", //"[concat('storage', uniqueString(resourceGroup().id))]",
     "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('storageName'))]"
   },
   "resources": [
@@ -249,7 +249,15 @@
         "httpsOnly": true,
         "siteConfig": {
           "phpVersion": "7.3",
-          "alwaysOn": true,        
+          "alwaysOn": true,
+          "defaultDocuments": [
+            "landing.php",
+            "Default.htm",
+            "Default.html",
+            "index.htm",
+            "index.html",
+            "index.php"
+          ],
           "connectionStrings": [
             {
               "name": "defaultConnection",
@@ -338,6 +346,21 @@
         }
       ]
     },
+    // {
+    //   "type": "Microsoft.Web/sites/config",
+    //   "apiVersion": "2018-11-01",
+    //   "name": "[concat(resourceGroup().name, '/web')]",
+    //   "location": "Central US",
+    //   "dependsOn": [
+    //     "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
+    //   ],
+    //   "tags": {
+    //     "displayName": "WebApp"
+    //   },
+    //   "properties": {
+    //     "minTlsVersion": "1.2"
+    //   }
+    // },
     {
       "apiVersion": "2017-12-01-preview",
       "location": "[resourceGroup().location]",
