@@ -189,7 +189,6 @@
     "databaseName": "[concat(replace(variables('siteName'), '-', '_'), '_db')]",
     "serverName": "[concat(variables('siteName'), '-mysql')]", // uniqueString(resourceGroup().id))]",
     "hostingPlanName": "[concat(variables('siteName'), '-serviceplan')]",
-    "sendgridAccountName": "[concat(variables('siteName'), '_sendgrid')]",
     "webSiteName": "[concat(variables('siteName'), '-web')]", // uniqueString(resourceGroup().id))]",
     "tierSymbol": {
       "Basic": "B",

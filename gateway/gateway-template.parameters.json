@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "envName": {
+            "value": "dev"
+        },
+        "vnetPrefix": {
+            "value": "10.1.0.0/24"
+        },
+        "appServiceHostName": {
+            "value": "rcpoc3dhi4ewj6lq3rg.azurewebsites.net"
+        },
+        "redcapHostName":{
+            "value": "redcap.wustl.edu"
+        }
+    }
+}
