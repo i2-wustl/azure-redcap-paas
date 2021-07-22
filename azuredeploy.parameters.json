@@ -9,7 +9,7 @@
       "value": "i2admin"
     },
     "administratorLoginPassword": {
-      "value": "pocPassword!"
+      "value": "devPassword!"
     },
     "redcapAppZip": {
       "value": "https://generali2wustldiag.blob.core.windows.net/temp/redcap9.5.5.zip"
@@ -52,9 +52,6 @@
     },
     "storageType": {
       "value": "Standard_LRS"
-    },
-    "storageContainerName": {
-      "value": "rcdevtest04"
     },
     "repoURL": {
       "value": "https://github.com/i2-wustl/azure-redcap-paas.git"

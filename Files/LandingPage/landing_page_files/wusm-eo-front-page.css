@@ -1,0 +1,147 @@
+.home-events {
+	width: 100%;
+	padding: 60px 0 70px;
+}
+.home-events .bx-wrapper .bx-viewport {
+	background: none;
+}
+.featured-event {
+	max-width: 830px;
+	width: 90%;
+	margin: 0 auto;
+}
+.fe-photo {
+	float: left;
+	max-width: 400px;
+	width: 47%;
+}
+.fe-text {
+	float: left;
+	max-width: 430px;
+	width: 53%;
+	padding: 0 0 0 25px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.ie-lt9 .fe-text {
+	width: 45%;
+}
+.fe-text .date {
+	font-size: 0.85em;
+	color: #9e9e9e;
+	font-weight: 600;
+	letter-spacing: 1.38px;
+	text-transform: uppercase;
+}
+.fe-text h1 {
+	font-size: 1.142em;
+	color: #990000;
+	margin: 5px 0 15px;
+	font-weight: 600;
+}
+.fe-text p {
+	line-height: 23px;
+}
+.event-home {
+	max-width: 960px;
+	width: 90%;
+	margin: 0px auto 0;
+	padding: 0 50px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.events-home .triangle-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #53565a;
+	margin: 2px auto 7px;
+}
+.event-item {
+	-webkit-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+.event-item a {
+	color: #99000;
+	font-weight: 600;
+	font-size: 1.143em;
+}
+.event-date {
+	float: left;
+	width: 20%;
+}
+.event-date .month {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .75px;
+	text-align: center;
+	text-transform: uppercase;
+}
+.event-date .day {
+	color: #333333;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-size: 38px;
+	font-weight: 700;
+	text-align: center;
+}
+.event-date p {
+	line-height: 1;
+}
+.event-details {
+	float: right;
+	width: 80%;
+}
+.event-details p.eventtitle {
+	padding-top: 13px;
+}
+.event-details p.time {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .75px;
+}
+.bx-viewport {
+	min-height: 75px;
+}
+.see-all {
+	font-weight: 700;
+	text-align: center;
+	padding: 15px 0 0;
+}
+.see-all a {
+	text-transform: uppercase;
+	font-weight: 600;
+}
+.events-home .bx-wrapper {
+	max-width: 960px;
+}
+@media screen and (max-width: 960px) {
+	.events-home {
+		margin: 0 auto;
+		max-width: 640px;
+	}
+}
+@media screen and (max-width: 768px) {
+	.events-home {
+		margin: 0 auto;
+		max-width: 280px;
+	}
+	li.event-item {
+		max-width: 280px !important;
+	}
+	.event-date {
+		width: 30%;
+	}
+	.event-details {
+		width: 70%;
+	}
+}
+@media screen and (max-width: 600px) {
+	.bx-controls-direction {
+		display: none;
+	}
+}

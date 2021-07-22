@@ -1,0 +1,282 @@
+.news-story {
+	margin       : 20px auto;
+	border       : 1px #e9eaea solid;
+	border-radius: 3px;
+	box-sizing   : border-box; behavior: url(/wp-content/plugins/wusm-news/js/boxsizing.htc);
+	box-shadow   : 0 0 5px 1px #eee;
+	padding      : 40px 60px;
+	display      : block;
+	font-size    : 16px;
+	font-weight  : 600;
+	transition   : all 0.3s ease-in-out;
+	max-width    : 640px;
+}
+
+.news-story:hover {
+	box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+
+.horizontal-news-container {
+	margin: 0 -9999px;
+	padding: 0 9999px;
+}
+
+.horizontal-news-list,
+.horizontal-news-container {
+	position: relative;
+}
+
+.horizontal-news-list {
+	margin: 0 auto;
+}
+
+.horizontal-news-list .news-story {
+	width: 300px;
+	display: inline-block;
+	margin: 60px 20px 10px 0;
+	border-bottom: 5px solid;
+}
+
+.horizontal-news-list .last-story {
+	margin-right: 0;
+}
+
+.news-story h4 {
+	margin: 0;
+}
+
+.all-news {
+	font-size  : 12px;
+	font-weight: bold;
+	width      : 100%;
+	display    : inline-block;
+	margin-top : 20px;
+	text-align : center;
+}
+
+.nav-previous {
+	text-align: right;
+}
+
+.home-news {
+	padding: 60px 0 70px;
+}
+
+.home-news > div {
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+.home-news h2 {
+	font-size: 24px;
+	font-weight: 600;
+	margin: 0 auto;
+	text-align: center;
+	padding-bottom: 20px;
+	max-width: 750px;
+	letter-spacing: .5px;
+}
+
+.home-news article {
+	background-color: #333;
+	box-sizing   : border-box; behavior: url(/wp-content/plugins/wusm-news/js/boxsizing.htc);
+	width: 33.33333%;
+	padding: 10px;
+	float: left;
+	margin-bottom: 35px;
+	max-width: none;
+	background: none;
+}
+
+.ie7 .home-news article {
+	width: 29%;
+}
+
+.home-news article p {
+	color: #333;
+	line-height: 1.7;
+	margin: 0;
+	word-wrap: break-word;
+}
+
+.home-news article .post-date {
+	text-transform: uppercase;
+	font-weight: 600;
+	color: #53565A;
+	font-size: 12px;
+	letter-spacing: 0.9px;
+}
+
+.home-news h3 {
+	color: #971a20;
+	line-height: 1.5;
+	margin: 0 0 10px;
+}
+
+.see-all {
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: 1px;
+	clear: both;
+}
+
+.entry {
+	margin-bottom: 25px;
+	clear: both;
+}
+
+.entry p {
+	margin-bottom: 0;
+}
+
+.entry time,
+.wusm-news-source {
+	color: #707070;
+	font-size: 12px;
+	line-height: 20px;
+
+	text-transform: uppercase;
+}
+
+.entry h2 {
+	margin: 0;
+}
+
+.entry img {
+	float: right;
+	margin-top: -15px;
+	margin-left: 20px;
+	margin-bottom: 20px;
+	max-width: 220px;
+	max-height: 147px;
+}
+
+.see-all-stories .arrow-left {
+	content: '';
+	width: 0;
+	height: 0;
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+	border-right: 6px solid #990000;
+	position: absolute;
+	left: 0;
+	top: 3px;
+}
+
+.see-all-stories:hover .arrow-left {
+	border-right: 6px solid #717171;
+}
+
+.see-all-stories {
+	margin: 0 0 25px 0;
+	display: inline-block;
+	position: relative;
+	padding-left: 16px;
+}
+
+.see-all-stories,
+.more-news {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.more-news {
+	float: right;
+	margin-top: 40px;
+}
+
+.latest-news {
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+.latest-news-story {
+	max-width: 200px;
+	margin-right: 18px;
+	box-sizing: border-box;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.latest-news-story:last-child {
+	margin-right: 0;
+}
+
+.more-news-title {
+	margin-top: 5px;
+}
+
+.more-news-date {
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+.news-footer {
+	clear: both;
+}
+
+.news-footer-top {
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 20px;
+}
+
+.wusm-news-pagination-nav {
+	margin-top: 50px;
+	text-align: center;
+}
+
+.wusm-news-pagination-nav a,
+.current-wusm-news-page {
+	text-transform: uppercase;
+	display: inline-block;
+	padding: 0 12px;
+	border-left: 1px solid #191919;
+}
+
+.wusm-news-pagination-nav a.first-child ,
+.wusm-news-pagination-nav .current-wusm-news-page.first-child{
+	border: none;
+}
+
+.wusm-news-pagination-nav a.last-child {
+	padding-right: 0;
+}
+
+.single-story-date {
+	font-size: 12px;
+	text-transform: uppercase;
+	padding: 15px 0;
+	margin-top: -30px;
+	margin-bottom: 0;
+}
+
+@media screen and (max-width: 990px) {
+	.home-news > div {
+		max-width: 640px;
+		width: 90%;
+	}
+
+	.home-news article {
+		width: 100%;
+		margin-bottom: 35px;
+		padding: 0;
+	}
+
+}
+
+@media screen and (max-width: 500px) {
+	.home-news {
+		padding: 40px 0;
+	}
+
+	.entry img {
+		display: block;
+		float: none;
+		clear: both;
+		margin: 6px auto;
+		max-width: 100%;
+		max-height: inherit;
+	}
+
+}

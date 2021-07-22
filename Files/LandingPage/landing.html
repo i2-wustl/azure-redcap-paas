@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> REDCap </title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/favicon.ico">
+  <link rel="apple-touch-icon" href="https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/apple-touch-icon.png">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+  <link rel="stylesheet" id="bxslider-css" href="landing_page_files/jquery.css" type="text/css" media="all">
+  <link rel="stylesheet" id="wusm-eo-css" href="landing_page_files/wusm-eo-front-page.css" type="text/css" media="all">
+  <link rel="stylesheet" id="news-styles-css" href="landing_page_files/wusm-news.css" type="text/css" media="all">
+  <link rel="stylesheet" id="wustl-settings-user-css" href="landing_page_files/user.css" type="text/css" media="all">
+  <link rel="stylesheet" id="wusm-css" href="landing_page_files/style.css" type="text/css" media="all">
+  <link rel="stylesheet" id="open-sans-css" href="landing_page_files/css.css" type="text/css" media="all">
+  <link rel="stylesheet" id="dashicons-css" href="landing_page_files/dashicons.css" type="text/css" media="all">
+
+  <script type="text/javascript" src="landing_page_files/jquery.js"></script>
+  <script type="text/javascript" src="landing_page_files/jquery-migrate.js"></script>
+  <script type="text/javascript" src="landing_page_files/functions.js"></script>
+  <script type="text/javascript" src="landing_page_files/jquery_002.js"></script>
+  <script type="text/javascript" src="landing_page_files/functions_002.js"></script>
+  <script type="text/javascript">    
+    function go(env) {
+      let url = '/login.php';
+      //"/.auth/login/aad?post_login_redirect_url=/redcap/index.php"
+      switch (env) {
+        case 'dev':
+          url = 'https://redcap.wustl.edu/redcap/srvrs/dev_v3_1_0_001/redcap/';
+          break;
+        case 'v7':
+          url = 'https://redcap.wustl.edu/redcap/srvrs/prod_v3_1_0_001/redcap/';
+          break;
+        default:
+          break;
+      }
+      window.location.assign(url);
+    }
+
+    function copyrightCurrentYear(year = 2018, tag = 'copyrightyear') {
+
+      var currentYear = year;
+      currentYear = new Date().getFullYear();
+
+      if (currentYear > year) {
+        jQuery("#" + tag).html("-" + currentYear);
+      }
+    }
+
+    jQuery(document).ready(function () {
+      copyrightCurrentYear();
+
+      jQuery.ajax({
+        type: "POST",
+        beforeSend: function (request) {
+          request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          request.setRequestHeader("Accept", "application/json");
+        },
+        url: "https://redcap.wustl.edu/redcap/api/",
+        data: "token=D170BE655AEDF91F9A3AE63D19369EB4&content=version",
+        processData: false,
+        success: function (msg) {
+          var majorversion = 8;
+          majorversion = msg.split('.', 1);
+          jQuery("#rcversion1").html(majorversion);
+          jQuery("#rcversion2").html(majorversion);
+          jQuery("#prod8").val('REDCap Version ' + majorversion + ' Production Server');
+        },
+
+        error: function (error) {
+          jQuery("#rcversion1").html("Server Down");
+          jQuery("#rcversion2").html("Server Down");
+          jQuery("#prod8").val('REDCap Version ' + "Server Down" + ' Production Server');
+
+        }
+      });
+    });
+  </script>
+</head>
+
+<body class="page-template-default page page-id-127 page-child parent-pageid-11">
+  <header>
+    <div id="header-logo-row" class="clearfix">
+      <div class="wrapper clearfix">
+        <div id="header-logo">
+          <a href="http://informatics.wustl.edu/"><img src="landing_page_files/wusm-i2-1line.png"
+              onerror="this.src='https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/wusm-logo.png';this.onerror=null;"
+              alt="Washington University Institute for Informatics" width="300" height="18"></a>
+        </div>
+        <nav id="utility-bar">
+          <ul id="utility-nav">
+            <li>
+              <a href="http://wustl.edu/">WUSTL</a>
+            </li>
+            <li>
+              <a href="http://medicine.wustl.edu/">WUSM</a>
+            </li>
+            <li>
+              <a href="http://informatics.wustl.edu/">I<sup>2</sup>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div id="main" class="clearfix">
+    <div align="center">
+
+      <br><br><br>
+      <img src='landing_page_files/redcap logo.png' title="RedCap" alt="" width="600"><br>
+      <p>
+        <small>REDCap is a secure, web-based application for building and managing online databases.</small>
+      </p>
+      <br>
+      <br><br><br>
+      <h1 style=font-size:120%>Welcome to REDCap. Please choose from the options below:</h1><br>
+      <fieldset
+        style="width: 400px; border-radius: 5px; border-width: 2px; border-style: groove; border-color: #990000; border-image: initial; border: 2;">
+        <legend style="float: left;">
+          <small>
+            <b>&nbsp;Version <span id="rcversion1">8</span></b>
+          </small>
+        </legend>
+        <p>&nbsp;</p>
+        <input type="button" onclick="go('prod')" id="prod8" name="prod8"
+          value="REDCap Version 8 Production Server"><br>
+        <p style=font-size:90%>
+          <small>WUSTL key is required for version <span id="rcversion2">8</span>.</small>
+        </p><br>
+      </fieldset>
+      <br>
+      <fieldset
+        style="width: 400px; border-radius: 5px; border-width: 2px; border-style: groove; border-color: #990000; border-image: initial; border: 2;">
+        <legend style="float: left;">
+          <small>
+            <b>&nbsp;Version 7</b>
+          </small>
+        </legend>
+        <p>&nbsp;</p>
+        <input type="button" onclick="go('v7')" id="prod7" name="prod7" value="REDCap Version 7 Production Server">
+        <p>&nbsp;</p>
+        <input type="button" onclick="go('dev')" id="demo7" name="demo7" value="REDCap Version 7 Demo Server"><br>
+        <p>&nbsp;</p>
+      </fieldset>
+      <br><br><br><br><br>
+    </div>
+  </div>
+  <footer>
+    <div id="site-footer">
+      <div class="wrapper">
+        <div id="site-footer-bottom" class="clearfix">
+          <div id="col1" style="width: auto;">
+            <p style=font-size:85%>If you require assistance or have any questions about REDCap, please contact the
+              WUSTL REDCap Administrators at the <a
+                href="mailto:redcap_helpdesk@wustl.edu?subject=REDCap Inquiry">REDCap Help Desk
+                [redcap_helpdesk@wustl.edu]</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="wusm-footer">
+      <div class="wrapper clearfix">
+        <div id="wusm-footer-left">
+          <a href="http://medicine.wustl.edu/"><img src="landing_page_files/wusm-logo-footer.svg"
+              onerror="this.src='https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/wusm-logo-footer.png';this.onerror=null;"
+              alt="Washington University School of Medicine in St. Louis" width="147" height="31"></a>
+          <div id="copyright">
+            <a href="http://www.wustl.edu/policies/copyright.html">&copy; 2018<span id="copyrightyear"></span>
+              Washington University in St. Louis</a>
+          </div>
+        </div>
+        <div id="wusm-footer-right">
+          <div id="wusm-social">
+            <a id="wusm-facebook" title="Facebook" href="https://www.facebook.com/WUSTLmedicine.health"><img
+                src="landing_page_files/facebook.svg"
+                onerror="this.src='https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/facebook.png';this.onerror=null;"></a>
+            <a id="wusm-twitter" title="Twitter" href="http://twitter.com/WUSTLmed"><img
+                src="landing_page_files/twitter.svg"
+                onerror="this.src='https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/twitter.png';this.onerror=null;"></a>
+            <a id="wusm-flickr" title="Flickr" href="https://www.flickr.com/photos/wustlmedicine/"><img
+                src="landing_page_files/flickr.svg"
+                onerror="this.src='https://webtheme.med.wustl.edu/wp-content/themes/wusm/_/img/flickr.png';this.onerror=null;"></a>
+          </div>
+          <nav>
+            <a class="first-child" href="http://emergency.wustl.edu/">Emergency</a>
+            <a href="http://medicine.wustl.edu/policies">Policies</a>
+            <a class="last-child" href="http://medicine.wustl.edu/news/">News</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

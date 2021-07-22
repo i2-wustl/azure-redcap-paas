@@ -54,6 +54,10 @@ function Main {
             Log("Moving files to web root")
 			MoveFiles
 
+			# copy app files to wwwroot
+            Log("Moving landing page files to web root")
+			MoveLandingPageFiles
+
 			# initialize PHP_INI_SYSTEM settings
 			# https://docs.microsoft.com/en-us/azure/app-service/web-sites-php-configure#changing-phpinisystem-configuration-settings
 			Log("Updating PHP and sendmail settings")
@@ -220,6 +224,17 @@ function GetSQLSchema {
 
 function MoveFiles {
     $source = "$path\target\$version\redcap"
+    $dest = $webRoot
+    $what = @("*.*","/E","/MOVE","/NFL","/NDL","NJH","NP","/LOG+:`"$logFile`"")
+
+    $cmdArgs = @("$source","$dest",$what)
+    robocopy @cmdArgs
+
+    Log("RoboCopy output: $($rcOutput[$LASTEXITCODE])")
+}
+
+function MoveLandingPageFiles {	
+    $source = "$path\Files\LandingPage"
     $dest = $webRoot
     $what = @("*.*","/E","/MOVE","/NFL","/NDL","NJH","NP","/LOG+:`"$logFile`"")
 

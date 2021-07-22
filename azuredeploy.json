@@ -162,13 +162,6 @@
         "description": "The default selected is 'Locally Redundant Storage' (3 copies in one region). See https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy for more information."
       }
     },
-    "storageContainerName": {
-      "type": "string",
-      "defaultValue": "redcap",
-      "metadata": {
-        "description": "Name of the container used to store backing files in the new storage account. This container is created automatically during deployment."
-      }
-    },
     "repoURL": {
       "type": "string",
       "defaultValue": "https://github.com/vanderbilt-redcap/redcap-azure.git",
@@ -186,6 +179,7 @@
   },
   "variables": {
     "siteName": "[replace(parameters('siteName'), ' ', '')]",
+    "normalizedSiteName": "[replace(replace(variables('siteName'), '-', ''), '_', '')]",
     "databaseName": "[concat(replace(variables('siteName'), '-', '_'), '_db')]",
     "serverName": "[concat(variables('siteName'), '-mysql')]", // uniqueString(resourceGroup().id))]",
     "hostingPlanName": "[concat(variables('siteName'), '-serviceplan')]",
@@ -196,8 +190,9 @@
       "MemoryOptimized": "MO"
     },
     "databaseForMySqlSku": "[concat(variables('tierSymbol')[parameters('databaseForMySqlTier')], '_', parameters('databaseForMySqlFamily'), '_', parameters('databaseForMySqlCores'))]",
-    "storageName": "[concat(replace(replace(variables('siteName'), '-', ''), '_', ''), 'storage')]", //"[concat('storage', uniqueString(resourceGroup().id))]",
-    "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('storageName'))]"
+    "storageName": "[concat(variables('normalizedSiteName'), 'storage')]", //"[concat('storage', uniqueString(resourceGroup().id))]",
+    "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('storageName'))]",
+    "storageContainerName": "[concat(variables('normalizedSiteName'), 'container')]"
   },
   "resources": [
     {
@@ -250,7 +245,7 @@
           "phpVersion": "7.3",
           "alwaysOn": true,
           "defaultDocuments": [
-            "landing.php",
+            "landing.html",
             "Default.htm",
             "Default.html",
             "index.htm",
@@ -267,7 +262,7 @@
           "appSettings": [
             {
               "Name": "StorageContainerName",
-              "Value": "[parameters('storageContainerName')]"
+              "Value": "[variables('storageContainerName')]"
             },
             {
               "Name": "StorageAccount",
@@ -439,7 +434,7 @@
     },
     "storageContainerName": {
       "type": "string",
-      "value": "[parameters('storageContainerName')]"
+      "value": "[variables('storageContainerName')]"
     }
   }
 }
