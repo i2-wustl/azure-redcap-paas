@@ -192,7 +192,7 @@
     "databaseForMySqlSku": "[concat(variables('tierSymbol')[parameters('databaseForMySqlTier')], '_', parameters('databaseForMySqlFamily'), '_', parameters('databaseForMySqlCores'))]",
     "storageName": "[concat(variables('normalizedSiteName'), 'storage')]", //"[concat('storage', uniqueString(resourceGroup().id))]",
     "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('storageName'))]",
-    "storageContainerName": "[concat(variables('normalizedSiteName'), 'container')]"
+    "storageContainerName": "[variables('normalizedSiteName')]" // "[concat(variables('normalizedSiteName'), 'container')]"
   },
   "resources": [
     {
