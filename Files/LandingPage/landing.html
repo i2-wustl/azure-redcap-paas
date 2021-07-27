@@ -26,16 +26,16 @@
   <script type="text/javascript" src="landing_page_files/functions.js"></script>
   <script type="text/javascript" src="landing_page_files/jquery_002.js"></script>
   <script type="text/javascript" src="landing_page_files/functions_002.js"></script>
-  <script type="text/javascript">    
+  <script type="text/javascript">
+    const baseUrl = 'https://redcapdev.wustl.edu';
     function go(env) {
       let url = '/login.php';
-      //"/.auth/login/aad?post_login_redirect_url=/redcap/index.php"
       switch (env) {
         case 'dev':
-          url = 'https://redcap.wustl.edu/redcap/srvrs/dev_v3_1_0_001/redcap/';
+          url = baseUrl + '/redcap/srvrs/dev_v3_1_0_001/redcap/';
           break;
         case 'v7':
-          url = 'https://redcap.wustl.edu/redcap/srvrs/prod_v3_1_0_001/redcap/';
+          url = baseUrl + '/redcap/srvrs/prod_v3_1_0_001/redcap/';
           break;
         default:
           break;
@@ -62,7 +62,7 @@
           request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
           request.setRequestHeader("Accept", "application/json");
         },
-        url: "https://redcap.wustl.edu/redcap/api/",
+        url: baseUrl + "/redcap/api/",
         data: "token=D170BE655AEDF91F9A3AE63D19369EB4&content=version",
         processData: false,
         success: function (msg) {

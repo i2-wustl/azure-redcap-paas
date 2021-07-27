@@ -3,27 +3,29 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "envName": {
-            "defaultValue": "dev",
-            "type": "String"
+            "defaultValue": "poc",
+            "type": "string"
         },
         "vnetPrefix": {
             "type": "string",
             "defaultValue": "10.1.0.0/16"
         },
-        "appServiceHostName": {
-            "type": "string",
-            "defaultValue": "rcpoc3dhi4ewj6lq3rg.azurewebsites.net"
-        },
         "redcapHostName": {
             "type": "string",
             "defaultValue": "vip-wusm-redcap.wustl.edu"
+        },
+        "publicIPAddress":{
+            "type": "string",
+            "defaultValue": "20.98.170.82"
         }
     },
     "variables": {
-        "gatewayName": "[concat('rc-gateway-', parameters('envName'))]",
-        "publicIPAddressName": "[concat('rc-ip-', parameters('envName'))]",
-        "publicIPAddress": "",
-        "vnetName": "[concat('rc-vnet-', parameters('envName'))]",
+        "baseName": "[concat('i2-redcap-', parameters('envName'))]",
+        "appServiceHostName": "[concat(variables('baseName'), '-web.azurewebsites.net')]",
+        "gatewayName": "[concat(variables('baseName'),'-gateway')]",
+        "publicIPAddressName": "[concat(variables('baseName'),'-ip')]",
+        "publicIPAddress": "[parameters('publicIPAddress')]",
+        "vnetName": "[concat(variables('baseName'),'-vnet')]",
         "vnetPrefix": "[parameters('vnetPrefix')]",
         "subnetPrefix": "[replace(parameters('vnetPrefix'), '16', '24')]"
     },
@@ -162,7 +164,7 @@
                         "properties": {
                             "backendAddresses": [
                                 {
-                                    "fqdn": "[parameters('appServiceHostName')]"
+                                    "fqdn": "[variables('appServiceHostName')]"
                                 }
                             ]
                         }
@@ -208,7 +210,7 @@
                             "port": 443,
                             "protocol": "Https",
                             "cookieBasedAffinity": "Disabled",
-                            "hostName": "[parameters('appServiceHostName')]",
+                            "hostName": "[variables('appServiceHostName')]",
                             "pickHostNameFromBackendAddress": false,
                             "affinityCookieName": "ApplicationGatewayAffinity",
                             "path": "/",

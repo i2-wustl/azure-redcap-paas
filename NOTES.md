@@ -9,8 +9,8 @@
     - Fixed some schema validation issues due to version upgrades
     - Normalizing resource names
 - azuredeploy.parameters.json
-    - Added POC default values
-    - NOTE: the admin password is currently in this file. THIS IS A BAD IDEA! This should be removed and prevented from being commited to the repo if possible. It is left here for now to make it easy to test the template.
+    - Added default values
+    - NOTE: the admin password in the template is overwritten by the init script which requires you pass in the admin password as a parameter.    
 - init.sh
     - Added this script to automate the CLI steps to deploy the template. This could certainly be improved but does make it easier to test changes to the template/deployment
 
@@ -19,6 +19,7 @@
 - landing page
     - Deployed in the root of the current version of RC (could consider hosting a static site to decouple the landing page)
     - Contains links to current, v7 prod and v7 demo
+    - Link to current version points to login.php which handles the OAuth redirect for unauthenticated users or redirects to REDCap home page if the user is already logged in.
 
 - auth settings
     - allow unauth
@@ -26,20 +27,17 @@
 
 
 
-
+## Configuration
 
 ### DNS 
     - redcapdev.wustl.edu A 20.98.177.239
         - points to the dev application gateway
     - redcapqa.wustl.edu A 20.98.170.82
         - points to the qa application gateway
-    - redcap.wustl.edu A 
+    - redcap.wustl.edu A X.X.X.X
         - points to the production application gateway
-
-    - NOTE: No longer needed since vip-wusm-redcap is public
-        - redcap7.wustl.edu CNAME vip-wusm-redcap.wustl.edu 
-            - points to current appp55m1.cbmi.wucon.wustl.edu host as a publicly accessible URL
-
+    - Additional TXT verification entires will need to be created for each app service
+    to allow the custom domain to be assigned.
 
 ### Application Gateway Configuration
     - VNet - unique per resource group
@@ -79,6 +77,7 @@
         - Override Path: /
         - Override Host: true
         - Host name: rcpoc3dhi4ewj6lq3rg.azurewebsites.net
+        - CookieAffinity
 
 ### IP Address
     - Public

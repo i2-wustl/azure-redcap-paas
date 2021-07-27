@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "envName": {
-            "value": "dev"
+            "value": "qa"
         },
         "vnetPrefix": {
             "value": "10.1.0.0/24"
         },
-        "appServiceHostName": {
-            "value": "rcpoc3dhi4ewj6lq3rg.azurewebsites.net"
-        },
         "redcapHostName":{
-            "value": "redcap.wustl.edu"
+            "value": "vip-wusm-redcap.wustl.edu"
+        },
+        "publicIPAddress":{
+            "value": "20.98.170.82"
         }
     }
 }
