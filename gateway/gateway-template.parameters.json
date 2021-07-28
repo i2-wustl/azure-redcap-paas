@@ -5,14 +5,12 @@
         "envName": {
             "value": "qa"
         },
-        "vnetPrefix": {
-            "value": "10.1.0.0/24"
+        "publicHostName":{
+            "value": "redcapqa.wustl.edu"
         },
-        "redcapHostName":{
-            "value": "vip-wusm-redcap.wustl.edu"
-        },
-        "publicIPAddress":{
-            "value": "20.98.170.82"
+        "certSecretId":{
+            "value": "https://i2-redcap-keys.vault.azure.net/secrets/another-test"            
         }
     }
 }
+//"value2": "https://i2-redcap-keys.vault.azure.net/certificates/i2-redcap-dev-gateway-cert/d2f48c9d30964e68b160432f4bb59f9c"
