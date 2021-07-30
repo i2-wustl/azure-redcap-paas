@@ -1,3 +1,27 @@
 Add custom domain
 Add Certificate and TLS binding to template
 Add auth settings to template
+
+
+_NOTE: Moving to script: Copy SecretId from the imported certificate into the gateway parameters `gateway/gateway-template.parameters.json`_
+
+
+
+
+TODO: moving this to the template:
+- assign certificate to the app service
+- auth settings
+    - allow unauth
+    - aad
+
+
+
+### DNS 
+    - redcapdev.wustl.edu A 20.98.177.239
+        - points to the dev application gateway
+    - redcapqa.wustl.edu A X.X.X.X
+        - points to the qa application gateway
+    - redcap.wustl.edu A X.X.X.X
+        - points to the production application gateway
+    - Additional TXT verification entires will need to be created for each app service
+    to allow the custom domain to be assigned.
