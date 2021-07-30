@@ -99,6 +99,13 @@
         "description": "Azure database for MySQL sku Size "
       }
     },
+    "databaseBackupRetentionDays": {
+      "type": "int",
+      "defaultValue": 30,
+      "metadata": {
+        "description": "Number of days to keep backups"
+      }
+    },
     "databaseForMySqlTier": {
       "type": "string",
       "defaultValue": "GeneralPurpose",
@@ -369,7 +376,7 @@
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageProfile": {
           "storageMB": "[parameters('databaseSkuSizeMB')]",
-          "backupRetentionDays": 7,
+          "backupRetentionDays": "[parameters('databaseBackupRetentionDays')]",
           "geoRedundantBackup": "Disabled"
         },
         "sslEnforcement": "Disabled"

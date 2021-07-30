@@ -1,56 +1,15 @@
-# Overview of changes made
-
-- Files/settings.ini: Added configuration for large uploads
-- azuredeploy.json
-    - Updated $schema references to new versions
-    - Added additional SKUs to be used as parameters. This allows P2V2 support.
-    - Updated various apiVersion values
-    - Add httpsOnly configuration
-    - Fixed some schema validation issues due to version upgrades
-    - Normalizing resource names
-- azuredeploy.parameters.json
-    - Added default values
-    - NOTE: the admin password in the template is overwritten by the init script which requires you pass in the admin password as a parameter.    
-- init.sh
-    - Added this script to automate the CLI steps to deploy the template. This could certainly be improved but does make it easier to test changes to the template/deployment
-
-
-## Additional Steps
-- landing page
-    - Deployed in the root of the current version of RC (could consider hosting a static site to decouple the landing page)
-    - Contains links to current, v7 prod and v7 demo
-    - Link to current version points to login.php which handles the OAuth redirect for unauthenticated users or redirects to REDCap home page if the user is already logged in.
-
-- auth settings
-    - allow unauth
-    - aad
-
-
-
-## Configuration
-
-### DNS 
-    - redcapdev.wustl.edu A 20.98.177.239
-        - points to the dev application gateway
-    - redcapqa.wustl.edu A 20.98.170.82
-        - points to the qa application gateway
-    - redcap.wustl.edu A X.X.X.X
-        - points to the production application gateway
-    - Additional TXT verification entires will need to be created for each app service
-    to allow the custom domain to be assigned.
-
-### Application Gateway Configuration
+# Application Gateway Configuration 
     - VNet - unique per resource group
     - Public IP - unique per gateway
 
-#### Backend Pools
+## Backend Pools
     - appservice (aka: pocservices)
         - target type: App Services
         - target: select the corresponding app service 
     - version7 (aka: redcap)
         - target type: FQDN
         - target: vip-wusm-redcap.wustl.edu
-#### HTTP settings
+## HTTP settings
     - http-setting
         - Protocol: HTTP
         - Port: 80
@@ -79,11 +38,11 @@
         - Host name: rcpoc3dhi4ewj6lq3rg.azurewebsites.net
         - CookieAffinity
 
-### IP Address
+## IP Address
     - Public
     - http and https listeners
 
-#### Listeners
+## Listeners
     - https-listener
         - IP: Public
         - Port: 443
@@ -98,7 +57,7 @@
         - Rule: None
         - Type: Basic
 
-#### Rules
+## Rules
 The order of the Path Based Rules matters. The Home rule can be adjusted to point to a static site that hosts a landing page if we decide to go that route.
 
     - main-rule:
@@ -124,3 +83,4 @@ The order of the Path Based Rules matters. The Home rule can be adjusted to poin
                 - Path: /*
                 - HTTP Setting: app-service-settings
                 - Backend Pool: appservice
+

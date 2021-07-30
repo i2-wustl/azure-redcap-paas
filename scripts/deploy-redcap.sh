@@ -1,20 +1,21 @@
 location="Central US"
-template="azuredeploy.json"
-parameters="azuredeploy.parameters.json"
+template="../azuredeploy.json"
+parameters="../azuredeploy.parameters.json"
 subscription="66fc3882-1a21-4787-9351-af5aa8eb3563"
+siteName="i2-redcap-$1"
 group="$1-rg" #i2redcap2-dev-rg-main
 adminPassword="$2"
 
 if [ -z "$1" ]
 then
     echo "No environment target specified for the deployment"
-    echo "Example: ./init dev SomePassword123"
+    echo "Example: ./deploy-redcap.sh dev SomePassword123"
     exit
 fi
 if [ -z "$adminPassword" ]
 then
     echo "No password provided, please specify an admin password for the deployment"
-    echo "Example: ./init dev SomePassword123"
+    echo "Example: ./deploy-redcap.sh dev SomePassword123"
     exit
 fi
 
@@ -34,8 +35,8 @@ az deployment group create \
     --resource-group $group \
     --template-file $template \
     --parameters $parameters \
-    --parameters siteName="$1" \
+    --parameters siteName="$siteName" \
     --parameters administratorLoginPassword="$adminPassword"
-    --name "$1-deployment"
+    --name "$group-deployment"
 
 
