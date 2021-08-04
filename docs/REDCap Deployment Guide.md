@@ -78,6 +78,8 @@ We need to file a Service Now ticket to request these entries. Follow these step
     {hostname}  - A - {ipAddress}
     
     {hostname} - TXT - {domainVerificationToken}
+
+    awverify.{hostname} - TXT - awverify.i2-redcap-{env}-web.azurewebsites.net
     
     Thank you!
     ```    
@@ -126,9 +128,51 @@ Now that all of the necessary configuration is done, we can deploy the main REDC
 ```
 This script will take several minutes to run. Once it is complete you will be able to browse to the new REDCap deployment using the default URL provided by the app service. It should look like this: https://i2-redcap-{env}-web.azurewebsites.net/index.php
 
+#### Manual App Configuration
+
+After the application is created we need to do a few manual configuration steps. We will need to add the custom domain to the app service, configure the SSL binding, and enable WUSTL Key authentication. All of these steps can be completed using the [Azure Portal](https://portal.azure.com).
+
+##### Add Domain and SSL Binding
+
+1. Open the newly created app service
+1. Open the `Custom Domains` view
+1. Click `Add custom domain`
+1. Enter {hostname}
+1. Click `Validate`
+1. Click `Add custom domain`
+1. Click `TLS/SSL settings`
+1. Click `Private Key Certificates (.pfx)`
+1. Click `Import Key Vault Certificate`
+1. Select the certificate we created for this deployment
+1. Click `Custom domains`
+1. Click `Add binding` under the `SSL Binding` column for the domain you just added
+1. Select the certificate and specify `SNI SSL`
+1. Save your changes
+
+
+**References**
+[Configure Custom Domain](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-domain?tabs=cname)
+[Configure SSL](https://docs.microsoft.com/en-us/azure/app-service/configure-ssl-bindings)
+
+
+##### Configure Authentication
+
+1. Open the `Authentication` view for the app service.
+1. Click `Add Identity Provider`
+1. Select Microsoft for Identity Provider drop down
+1. App registration type: `Provide the details of an existing app registration`
+1. Application Id: <Provided By WUIT>
+1. Client Secret: <Provided By WUIT>
+1. Authentication: `Allow unauthenticated access`
+1. Click `Add`
+
+
+**References**
+[Configure AAD Authentication](https://docs.microsoft.com/en-us/azure/app-service/configure-authentication-provider-aad#configure-client-apps-to-access-your-app-service)
+
 ### Deploy Gateway Template
 
-The final step is to deploy the Application Gateway. To do this run the following script and provide the {env} and certificate name. Assuming you used the `pre-config.sh` script the certificate name should be `i2-redcap-{env}-cert`.
+The final step is to deploy the Application Gateway. To do this run the following script and provide the {env} and optionally a certificate name. Assuming you used the `pre-config.sh` script the certificate name should be `i2-redcap-{env}-cert`. If no certificate name is provided to the script it will default to that naming pattern.
 
  `./scripts/deploy-gateway.sh {env} {certificateName}`
 

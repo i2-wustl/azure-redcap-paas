@@ -3,7 +3,7 @@ template="../azuredeploy.json"
 parameters="../azuredeploy.parameters.json"
 subscription="66fc3882-1a21-4787-9351-af5aa8eb3563"
 siteName="i2-redcap-$1"
-group="$1-rg" #i2redcap2-dev-rg-main
+group="i2-redcap-$1-rg"
 adminPassword="$2"
 
 if [ -z "$1" ]
@@ -31,6 +31,11 @@ az configure --defaults group="$group"
 
 echo "Logged in, Resource Group set to: $group"
 
+#grab cert and store it in the key vault...
+#upload pfx to value
+#az keyvault secret set --vault-name KEY_VAULT_NAME --encoding base64 --description text/plain --name CERT_SECRET_NAME --file certificate.pfx
+
+
 az deployment group create \
     --resource-group $group \
     --template-file $template \
@@ -40,3 +45,6 @@ az deployment group create \
     --name "$group-deployment"
 
 
+# Map your prepared custom domain name to the web app.
+# az webapp config hostname add --webapp-name $webappname --resource-group $resourceGroup \
+# --hostname $fqdn

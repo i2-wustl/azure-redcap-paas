@@ -12,7 +12,7 @@
         },
         "certSecretId": {
             "type": "string",
-            "defaultValue": "https://i2-redcap-keys.vault.azure.net/certificates/i2-redcap-dev-gateway-cert/d2f48c9d30964e68b160432f4bb59f9c"
+            "defaultValue": ""
         }
     },
     "variables": {

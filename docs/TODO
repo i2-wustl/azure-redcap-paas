@@ -3,10 +3,6 @@ Add Certificate and TLS binding to template
 Add auth settings to template
 
 
-_NOTE: Moving to script: Copy SecretId from the imported certificate into the gateway parameters `gateway/gateway-template.parameters.json`_
-
-
-
 
 TODO: moving this to the template:
 - assign certificate to the app service

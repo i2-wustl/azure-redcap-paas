@@ -2,6 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "domainName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of azure web app"
+      }
+    },
     "siteName": {
       "type": "string",
       "metadata": {
@@ -186,6 +192,7 @@
   },
   "variables": {
     "siteName": "[replace(parameters('siteName'), ' ', '')]",
+    "domainName": "[parameters('domainName')]",
     "normalizedSiteName": "[replace(replace(variables('siteName'), '-', ''), '_', '')]",
     "databaseName": "[concat(replace(variables('siteName'), '-', '_'), '_db')]",
     "serverName": "[concat(variables('siteName'), '-mysql')]", // uniqueString(resourceGroup().id))]",
@@ -347,6 +354,17 @@
         }
       ]
     },
+    // {
+    //   "apiVersion": "2015-08-01",
+    //   "name": "[concat(concat(variables('websiteName'), '.azurewebsites.net'),'/',variables('domainName'))]",
+    //   "type": "Microsoft.Web/sites/hostNameBindings",
+    //   "location": "[resourceGroup().location]",
+    //   "properties": {
+    //     "domainId": null,
+    //     "hostNameType": "Verified",
+    //     "siteName": "i2-redcap-qa-web.azurewebsites.net"
+    //   }
+    // },
     // {
     //   "type": "Microsoft.Web/sites/config",
     //   "apiVersion": "2018-11-01",
