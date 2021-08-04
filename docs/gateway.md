@@ -84,3 +84,6 @@ The order of the Path Based Rules matters. The Home rule can be adjusted to poin
                 - HTTP Setting: app-service-settings
                 - Backend Pool: appservice
 
+## References
+
+https://techcommunity.microsoft.com/t5/apps-on-azure/setting-up-application-gateway-with-an-app-service-that-uses/ba-p/392490

@@ -58,9 +58,7 @@ Once created, you will need to login the the Azure portal and link the new certi
 
 ### DNS Entry Creation
 
-Now that we have an IP Address and Certificate created, we can request the necessary DNS entries. We need to have two DNS entries created for each REDCap environment/deployment. One entry is a standard `A` record that will point the hostname to the IP Address we just created.
-
-The second entry is a `TXT` record that will be used to verify ownership of the domain. This is necessary to complete the certificate creation process.
+Now that we have a certificate created, we can request the necessary DNS entries we need for domain verification. We need to have two `TXT` entries created for each REDCap environment/deployment. One entry will be used to verify ownership of the domain. This is necessary to complete the certificate creation process. The other will allow us to assign the domain to the app service once it is created.
 
 We need to file a Service Now ticket to request these entries. Follow these steps to submit the request:
 
@@ -75,9 +73,7 @@ We need to file a Service Now ticket to request these entries. Follow these step
    ```
     Please create the following two DNS entries:
     
-    {hostname}  - A - {ipAddress}
-    
-    {hostname} - TXT - {domainVerificationToken}
+    @ - TXT - {domainVerificationToken}
 
     awverify.{hostname} - TXT - awverify.i2-redcap-{env}-web.azurewebsites.net
     
@@ -119,6 +115,7 @@ Finally import the `pfx` file into the Key Vault certificates.
 1. Password: {leave blank}
 1. Click `Create`
 
+
 ### Deploy Main Template and Configure app
 
 Now that all of the necessary configuration is done, we can deploy the main REDCap resources. To do this all we will need to is run the deployment script with a few  parameters. The parameters are the {env} and the password to use for admin access to the database.
@@ -140,14 +137,13 @@ After the application is created we need to do a few manual configuration steps.
 1. Enter {hostname}
 1. Click `Validate`
 1. Click `Add custom domain`
-1. Click `TLS/SSL settings`
-1. Click `Private Key Certificates (.pfx)`
-1. Click `Import Key Vault Certificate`
-1. Select the certificate we created for this deployment
-1. Click `Custom domains`
-1. Click `Add binding` under the `SSL Binding` column for the domain you just added
+1. Click `Add binding` under the SSL Binding heading for teh domain you just added
+1. Click `Import App Service Certificate`
+1. Select the certificate we created for this deployment ie `i2-redcap-{env}-cert
+1. Click `Ok`
+1. Select the `Private Certificate Thumbprint` for the domain
 1. Select the certificate and specify `SNI SSL`
-1. Save your changes
+1. Click `Adding Binding`
 
 
 **References**
@@ -170,6 +166,37 @@ After the application is created we need to do a few manual configuration steps.
 **References**
 [Configure AAD Authentication](https://docs.microsoft.com/en-us/azure/app-service/configure-authentication-provider-aad#configure-client-apps-to-access-your-app-service)
 
+### Domain DNS Entry
+
+We need to file a Service Now ticket to request a standard `A` record that will point the hostname to the IP Address of the gateway. I recommend submitting the request as soon as you have completed setting up the app service. This allows the request to be processed while you finalize the deployment.
+
+Follow these steps to submit the request:
+
+1. Open https://wustl.service-now.com/sp?id=sc_home
+2. Search for `DNS` in the service catalog search box
+3. Click `IP Address DHCP and DNS Management`
+4. Fill out the form with the following information:
+    * Date needed: {Select an appropriate date}
+    * IP address of the device: See below
+    * Domain name: {hostname}
+    * Additional details: 
+   ```
+    Please create the following two DNS entries:
+    
+    {hostname} - A - {ipAddress}
+    
+    Thank you!
+    ```    
+    _NOTE: Replace the {Placeholders} with the appropriate values. You may need to return to the Azure Portal to get the IP Address and/or verification token if you do not have them available._
+
+5. Verify that the correct values are included in the additional details and click the `Order Now` button.
+
+### SMTP Relay Allow List
+
+To enable the app service to send email, we need to request that the outbound IP address of the app service be added to the allow list for the `rsmtp.wustl.edu` mail server.
+
+TODO: Add instructions on how to request smtp allow list entires
+
 ### Deploy Gateway Template
 
 The final step is to deploy the Application Gateway. To do this run the following script and provide the {env} and optionally a certificate name. Assuming you used the `pre-config.sh` script the certificate name should be `i2-redcap-{env}-cert`. If no certificate name is provided to the script it will default to that naming pattern.
@@ -178,3 +205,30 @@ The final step is to deploy the Application Gateway. To do this run the followin
 
 This script will also take a few minutes to complete. Once the script finishes you should be able to browse to https://{hostname} and log into the new REDCap deployment.
 
+
+### Final Cleanup
+
+Once the deployment is complete we should request that the verification entires be deleted from DNS. 
+
+Here are the steps to do so:
+
+1. Open https://wustl.service-now.com/sp?id=sc_home
+2. Search for `DNS` in the service catalog search box
+3. Click `IP Address DHCP and DNS Management`
+4. Fill out the form with the following information:
+    * Date needed: {Select an appropriate date}
+    * IP address of the device: See below
+    * Domain name: {hostname}
+    * Additional details: 
+   ```
+    Please delete the following two DNS entries:
+    
+    @ - TXT - {domainVerificationToken}
+
+    awverify.{hostname} - TXT - awverify.i2-redcap-{env}-web.azurewebsites.net
+    
+    Thank you!
+    ```    
+    _NOTE: Replace the {Placeholders} with the appropriate values. You may need to return to the Azure Portal to get the IP Address and/or verification token if you do not have them available._
+
+5. Verify that the correct values are included in the additional details and click the `Order Now` button.

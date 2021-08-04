@@ -1,10 +1,8 @@
 region="centralus"
 template="../gateway/gateway-template.json"
-#template="azuredeploy_with_SendGrid.json"
 parameters="../gateway/gateway-template.parameters.json"
-#subscription="829087ae-007e-48b5-96d9-8287ad3d00d0" #I2 - Sandbox
 subscription="66fc3882-1a21-4787-9351-af5aa8eb3563" #ICS - Redcap
-group="i2-redcap-$1-rg" # "$1-rg" #i2redcap2-dev-rg-main
+group="i2-redcap-$1-rg"
 certName=$2
 
 if [ -z "$1" ]
@@ -35,7 +33,6 @@ echo "Logged in, Resource Group set to: $group"
 # certId=$(az keyvault secret list --vault-name i2-redcap-keys \
 #     --query "[?name > 'i2-redcap-dev'].{id: id, name: name,tags: tags}[?tags.CertificateState == 'Ready'].{id:name}[0].id")
 
-#certId=$(az keyvault certificate show --name $certName --vault-name i2-redcap-keys --query "sid")
 certId=$(az keyvault certificate show --name "$certName" --vault-name "i2-redcap-keys" --query "sid" -o tsv)
 if [ -z "$certId" ]
 then
