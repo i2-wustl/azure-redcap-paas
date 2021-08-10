@@ -166,6 +166,11 @@ After the application is created we need to do a few manual configuration steps.
 **References**
 [Configure AAD Authentication](https://docs.microsoft.com/en-us/azure/app-service/configure-authentication-provider-aad#configure-client-apps-to-access-your-app-service)
 
+
+### Landing Page Settings
+
+Once you are able to configure REDCap and issue an API Token, you will need to update the `VersionApiToken` setting for the AppService. This setting is used by the `landing.php` page to pull the current version of REDCap.
+
 ### Domain DNS Entry
 
 We need to file a Service Now ticket to request a standard `A` record that will point the hostname to the IP Address of the gateway. I recommend submitting the request as soon as you have completed setting up the app service. This allows the request to be processed while you finalize the deployment.

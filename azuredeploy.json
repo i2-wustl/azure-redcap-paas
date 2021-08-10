@@ -260,6 +260,7 @@
           "alwaysOn": true,
           "defaultDocuments": [
             "landing.html",
+            "landing.php",
             "Default.htm",
             "Default.html",
             "index.htm",
@@ -329,6 +330,10 @@
             {
               "Name": "smtp_password",
               "value": "[parameters('smtpPassword')]"
+            },
+            {
+              "Name": "VersionApiKey",
+              "Value": "[Replace with token from REDCap]"
             }
           ]
         }
