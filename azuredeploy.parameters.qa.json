@@ -1,0 +1,63 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "domainName": {
+      "value": "redcapqa.wustl.edu"
+    },
+    "siteName": {
+      "value": "default-site-name"
+    },
+    "administratorLogin": {
+      "value": "i2admin"
+    },
+    "redcapAppZip": {
+      "value": "https://generali2wustldiag.blob.core.windows.net/temp/redcap9.5.5.zip"
+    },
+    "fromEmailAddress": {
+      "value": "redcap@wustl.edu"
+    },
+    "smtpFQDN": {
+      "value": "rsmtp.wustl.edu"
+    },
+    "smtpUser": {
+      "value": "null"
+    },
+    "smtpPassword": {
+      "value": "null"
+    },
+    "smtpPort": {
+      "value": 587
+    },
+    "skuName": {
+      "value": "P2V2"
+    },
+    "skuCapacity": {
+      "value": 1
+    },
+    "databaseSkuSizeMB": {
+      "value": 	2097152
+    },
+    "databaseForMySqlTier": {
+      "value": "GeneralPurpose"
+    },
+    "databaseForMySqlFamily": {
+      "value": "Gen5"
+    },
+    "databaseForMySqlCores": {
+      "value": 2
+    },
+    "mysqlVersion": {
+      "value": "5.7"
+    },
+    "storageType": {
+      "value": "Standard_LRS"
+    },
+    "repoURL": {
+      "value": "https://github.com/i2-wustl/azure-redcap-paas.git"
+    },
+    "branch": {
+      "value": "release/poc"
+    }
+  }
+}

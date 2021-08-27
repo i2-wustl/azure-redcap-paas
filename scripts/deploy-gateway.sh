@@ -1,6 +1,6 @@
 region="centralus"
-template="../gateway/gateway-template.json"
-parameters="../gateway/gateway-template.parameters.json"
+template="./gateway/gateway-template.json"
+parameters="./gateway/gateway-template.parameters.$1.json"
 subscription="66fc3882-1a21-4787-9351-af5aa8eb3563" #ICS - Redcap
 group="i2-redcap-$1-rg"
 certName=$2

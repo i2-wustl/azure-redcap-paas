@@ -37,6 +37,10 @@ This ticket will eventually get routed to the Identity Management team for proce
 
 These registrations will be used during app service creation. So, they will need to be in place before proceeding with the main deployment step. However, we can continue with some additional configuration as described in the next section.
 
+### vNet IP Provisioning
+
+TODO: fill in info about getting IP allocation
+
 ### Pre-deployment configuration
 
 We start by creating a resource group, static IP address, and certificate for the deployment. You can use the `scripts/pre-config.sh` script to create he resource group, IP address, and certificate. For example, to pre-configure QA you would issue this command:

@@ -5,8 +5,17 @@
         "envName": {
             "value": "qa"
         },
-        "publicHostName":{
+        "publicHostName": {
             "value": "redcapqa.wustl.edu"
+        },
+        "peeredVnetAddress": {
+            "value": "10.24.96.112/28"
+        },
+        "vnetAddress": {
+            "value": "10.112.0.0/24"
+        },
+        "subnetAddress": {
+            "value": "10.112.0.0/24"
         }
     }
 }

@@ -13,6 +13,18 @@
         "certSecretId": {
             "type": "string",
             "defaultValue": ""
+        },
+        "vnetAddress": {
+            "type": "string",
+            "defaultValue": "10.255.0.0/24"
+        },
+        "subnetAddress": {
+            "type": "string",
+            "defaultValue": "10.255.0.0/24"
+        },
+        "peeredVnetAddress": {
+            "type": "string",
+            "defaultValue": "10.24.0.0/24"
         }
     },
     "variables": {
@@ -22,8 +34,8 @@
         "gatewayName": "[concat(variables('baseName'),'-gateway')]",
         "publicIPAddressName": "[concat(variables('baseName'),'-ip')]",
         "vnetName": "[concat(variables('baseName'),'-vnet')]",
-        "vnetPrefix": "10.1.0.0/16",
-        "subnetPrefix": "[replace(variables('vnetPrefix'), '16', '24')]"
+        "vnetPrefix": "[parameters('vnetAddress')]",
+        "subnetPrefix": "[parameters('subnetAddress')]"
     },
     "resources": [
         {
@@ -34,7 +46,8 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[variables('vnetPrefix')]"
+                        "[variables('vnetPrefix')]",
+                        "[parameters('peeredVnetAddress')]"
                     ]
                 },
                 "subnets": [
@@ -42,6 +55,15 @@
                         "name": "default",
                         "properties": {
                             "addressPrefix": "[variables('subnetPrefix')]",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    },
+                    {
+                        "name": "peered",
+                        "properties": {
+                            "addressPrefix": "[parameters('peeredVnetAddress')]",
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
