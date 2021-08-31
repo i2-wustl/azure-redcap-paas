@@ -36,7 +36,7 @@
       "value": 1
     },
     "databaseSkuSizeMB": {
-      "value": 	2097152
+      "value": 	716800
     },
     "databaseForMySqlTier": {
       "value": "GeneralPurpose"

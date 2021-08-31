@@ -1,5 +1,5 @@
 location="Central US"
-template="../gateway/certificate.json"
+template="./gateway/certificate.json"
 # parameters="azuredeploy.parameters.json"
 subscription="66fc3882-1a21-4787-9351-af5aa8eb3563"
 #siteName="i2-redcap-$1"

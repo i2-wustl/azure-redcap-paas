@@ -332,7 +332,7 @@
             },
             {
               "Name": "VersionApiKey",
-              "Value": "[Replace with token from REDCap]"
+              "Value": "--Replace with token from REDCap--"
             }
           ]
         }
