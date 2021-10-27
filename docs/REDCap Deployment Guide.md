@@ -40,12 +40,13 @@ These registrations will be used during app service creation. So, they will need
 ### vNet IP Provisioning
 
 TODO: fill in info about getting IP allocation
-
+Request a 10.x/28 subnet from public cloud team...
+Verify connectivity to wustl network: `tcpping 10.39.166.104:636`
 ### Pre-deployment configuration
 
-We start by creating a resource group, static IP address, and certificate for the deployment. You can use the `scripts/pre-config.sh` script to create he resource group, IP address, and certificate. For example, to pre-configure QA you would issue this command:
+We start by creating a resource group, static IP address, and certificate for the deployment. You can use the `scripts/deploy-network.sh` script to create he resource group, IP address, and certificate. For example, to pre-configure QA you would issue this command:
 
-`./scripts/pre-config.sh qa redcapqa.wustl.edu`
+`./scripts/deploy-network.sh qa redcapqa.wustl.edu`
 
 Once created, you will need to login the the Azure portal and link the new certificate to the REDCap key vault. You will also need to copy the domain verification information for the certificate. To do so, follow these steps:
 
@@ -190,7 +191,7 @@ Follow these steps to submit the request:
     * Domain name: {hostname}
     * Additional details: 
    ```
-    Please create the following two DNS entries:
+    Please create the following DNS entry:
     
     {hostname} - A - {ipAddress}
     

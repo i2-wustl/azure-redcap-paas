@@ -5,17 +5,14 @@
         "envName": {
             "value": "dev"
         },
-        "publicHostName":{
+        "publicHostName": {
             "value": "redcapdev.wustl.edu"
         },
-        "peeredVnetAddress":{
-            "value":"10.24.96.96/28"
+        "peeredVnetAddress": {
+            "value": "10.24.96.128/28"
         },
-        "vnetAddress":{
-            "value": "10.96.0.0/24"
-        },
-        "subnetAddress":{
-            "value":"10.96.0.0/24"
+        "subnetAddress": {
+            "value": "10.24.96.128/28"
         }
     }
 }

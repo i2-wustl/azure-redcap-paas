@@ -6,10 +6,6 @@
             "defaultValue": "poc",
             "type": "string"
         },
-        "publicHostname": {
-            "type": "string",
-            "defaultValue": "redcapdev.wustl.edu"
-        },
         "certSecretId": {
             "type": "string",
             "defaultValue": ""
@@ -17,14 +13,6 @@
         "vnetAddress": {
             "type": "string",
             "defaultValue": "10.255.0.0/24"
-        },
-        "subnetAddress": {
-            "type": "string",
-            "defaultValue": "10.255.0.0/24"
-        },
-        "peeredVnetAddress": {
-            "type": "string",
-            "defaultValue": "10.24.0.0/24"
         }
     },
     "variables": {
@@ -33,9 +21,9 @@
         "appServiceHostName": "[concat(variables('baseName'), '-web.azurewebsites.net')]",
         "gatewayName": "[concat(variables('baseName'),'-gateway')]",
         "publicIPAddressName": "[concat(variables('baseName'),'-ip')]",
-        "vnetName": "[concat(variables('baseName'),'-vnet')]",
+        "vnetName": "[concat(variables('baseName'),'-gateway-vnet')]",
         "vnetPrefix": "[parameters('vnetAddress')]",
-        "subnetPrefix": "[parameters('subnetAddress')]"
+        "subnetPrefix": "[parameters('vnetAddress')]"
     },
     "resources": [
         {
@@ -46,8 +34,7 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "[variables('vnetPrefix')]",
-                        "[parameters('peeredVnetAddress')]"
+                        "[variables('vnetPrefix')]"
                     ]
                 },
                 "subnets": [
@@ -55,15 +42,6 @@
                         "name": "default",
                         "properties": {
                             "addressPrefix": "[variables('subnetPrefix')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "peered",
-                        "properties": {
-                            "addressPrefix": "[parameters('peeredVnetAddress')]",
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"

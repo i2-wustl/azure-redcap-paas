@@ -46,12 +46,14 @@ echo "Found certificate $certName: $certId"
 echo "Deploying gateway template, this could take a minute..."
 
 #certId="https://i2-redcap-keys.vault.azure.net/secrets/i2-redcap-dev-gateway-cert/d2f48c9d30964e68b160432f4bb59f9c"
+
 az deployment group create \
     --resource-group $group \
     --template-file $template \
-    --parameters $parameters  \
-    --name "$group-gateway-deployment" \
+    --name "$group-gateway" \
     --parameters envName="$1" \
-    --parameters certSecretId="$certId"
+    --parameters certSecretId="$certId" \
+    --only-show-errors
+    #--parameters $parameters  \
 
 echo "Gateway template has been deployed to $group"

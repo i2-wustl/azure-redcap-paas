@@ -1,0 +1,172 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "envName": {
+            "type": "string"
+        },
+        "publicHostname": {
+            "type": "string"
+        },
+        "vnetSubnet": {
+            "type": "string"
+        },
+        "productType": {
+            "type": "string",
+            "allowedValues": [
+                "StandardDomainValidatedSsl",
+                "StandardDomainValidatedWildCardSsl"
+            ],
+            "defaultValue": "StandardDomainValidatedSsl"
+        },
+        "autoRenew": {
+            "type": "bool",
+            "defaultValue": true
+        }
+    },
+    "variables": {
+        "baseName": "[concat('i2-redcap-', parameters('envName'))]",
+        "vnetName": "[concat(variables('baseName'),'-vnet')]",
+        "publicIPAddressName": "[concat(variables('baseName'),'-ip')]",
+        "certName": "[concat(variables('baseName'),'-cert')]",
+        "vnetSubnet": "[parameters('vnetSubnet')]",
+        "routeTableName": "[concat(variables('baseName'),'-route-table')]",
+        "nsgName": "[concat(variables('baseName'),'-nsg')]",
+        "distinguishedName": "[concat('CN=', parameters('publicHostname'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('publicIPAddressName')]",
+            "location": "centralus",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "apiVersion": "2019-08-01",
+            "name": "[variables('certName')]",
+            "type": "Microsoft.CertificateRegistration/certificateOrders",
+            "location": "global",
+            "properties": {
+                "autoRenew": "[parameters('autoRenew')]",
+                "distinguishedName": "[variables('distinguishedName')]",
+                "validityInYears": 1,
+                "productType": "[parameters('productType')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('nsgName')]",
+            "location": "centralus",
+            "properties": {
+                "securityRules": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('routeTableName')]",
+            "location": "centralus",
+            "properties": {
+                "disableBgpRoutePropagation": false,
+                "routes": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('vnetName')]",
+            "location": "centralus",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnetSubnet')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "[variables('vnetSubnet')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
+                            },
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.Sql",
+                                    "locations": [
+                                        "centralus"
+                                    ]
+                                },
+                                {
+                                    "service": "Microsoft.Web",
+                                    "locations": [
+                                        "centralus"
+                                    ]
+                                }
+                            ],
+                            "delegations": [
+
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('vnetName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[variables('vnetSubnet')]",
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
+                },
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', variables('routeTableName'))]"
+                },
+                "serviceEndpoints": [
+                    {
+                        "service": "Microsoft.Sql",
+                        "locations": [
+                            "centralus"
+                        ]
+                    },
+                    {
+                        "service": "Microsoft.Web",
+                        "locations": [
+                            "centralus"
+                        ]
+                    }
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        }      
+    ]
+}

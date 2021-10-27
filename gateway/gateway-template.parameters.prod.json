@@ -9,13 +9,10 @@
             "value": "redcap.wustl.edu"
         },
         "peeredVnetAddress": {
-            "value": "10.24.96.128/28"
-        },
-        "vnetAddress": {
-            "value": "10.128.0.0/24"
+            "value": "10.24.96.160/28"
         },
         "subnetAddress": {
-            "value": "10.128.0.0/24"
+            "value": "10.24.96.160/28"
         }
     }
 }

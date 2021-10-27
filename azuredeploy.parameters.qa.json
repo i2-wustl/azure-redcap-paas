@@ -2,11 +2,8 @@
   "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "domainName": {
-      "value": "redcapqa.wustl.edu"
-    },
-    "siteName": {
-      "value": "default-site-name"
+    "envName": {
+      "value": "qa"
     },
     "administratorLogin": {
       "value": "i2admin"

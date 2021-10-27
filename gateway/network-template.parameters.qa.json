@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "envName": {
+            "value": "qa"
+        },
+        "publicHostname": {
+            "value": "redcapqa.wustl.edu"
+        },
+        "vnetSubnet": {
+            "value": "10.24.96.144/28"
+        }
+    }
+}
