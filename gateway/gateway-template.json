@@ -1,0 +1,431 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "envName": {
+            "defaultValue": "poc",
+            "type": "string"
+        },
+        "certSecretId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "vnetAddress": {
+            "type": "string",
+            "defaultValue": "10.255.0.0/24"
+        }
+    },
+    "variables": {
+        "redcapHostName": "vip-wusm-redcap.wustl.edu",
+        "baseName": "[concat('i2-redcap-', parameters('envName'))]",
+        "appServiceHostName": "[concat(variables('baseName'), '-web.azurewebsites.net')]",
+        "gatewayName": "[concat(variables('baseName'),'-gateway')]",
+        "publicIPAddressName": "[concat(variables('baseName'),'-ip')]",
+        "vnetName": "[concat(variables('baseName'),'-gateway-vnet')]",
+        "vnetPrefix": "[parameters('vnetAddress')]",
+        "subnetPrefix": "[parameters('vnetAddress')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('vnetName')]",
+            "location": "centralus",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "[variables('subnetPrefix')]",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(variables('vnetName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+            ],
+            "properties": {
+                "addressPrefix": "[variables('subnetPrefix')]",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/applicationGateways",
+            "apiVersion": "2020-11-01",
+            "name": "[variables('gatewayName')]",
+            "location": "centralus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'default')]"
+            ],
+            "identity": {
+                "type": "UserAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('i2-redcap-main-rg','Microsoft.ManagedIdentity/userAssignedIdentities','i2-redcap-main-ident')]": {}
+                }
+            },
+            "properties": {
+                "sku": {
+                    "name": "Standard_v2",
+                    "tier": "Standard_v2"
+                },
+                "gatewayIPConfigurations": [
+                    {
+                        "name": "appGatewayIpConfig",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'default')]"
+                            }
+                        }
+                    }
+                ],
+                "sslCertificates": [
+                    {
+                        "name": "gateway-ip-cert",
+                        "properties": {
+                            "keyVaultSecretId": "[parameters('certSecretId')]"
+                        }
+                    }
+                ],
+                "trustedRootCertificates": [],
+                "trustedClientCertificates": [],
+                "sslProfiles": [],
+                "frontendIPConfigurations": [
+                    {
+                        "name": "appGwPublicFrontendIp",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+                            }
+                        }
+                    }
+                ],
+                "frontendPorts": [
+                    {
+                        "name": "port_80",
+                        "properties": {
+                            "port": 80
+                        }
+                    },
+                    {
+                        "name": "port_443",
+                        "properties": {
+                            "port": 443
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "appservices",
+                        "properties": {
+                            "backendAddresses": [
+                                {
+                                    "fqdn": "[variables('appServiceHostName')]"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "redcap",
+                        "properties": {
+                            "backendAddresses": [
+                                {
+                                    "fqdn": "[variables('redcapHostName')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "backendHttpSettingsCollection": [
+                    {
+                        "name": "http-setting",
+                        "properties": {
+                            "port": 80,
+                            "protocol": "Http",
+                            "cookieBasedAffinity": "Disabled",
+                            "pickHostNameFromBackendAddress": false,
+                            "affinityCookieName": "ApplicationGatewayAffinity",
+                            "requestTimeout": 20
+                        }
+                    },
+                    {
+                        "name": "prod-settings",
+                        "properties": {
+                            "port": 443,
+                            "protocol": "Https",
+                            "cookieBasedAffinity": "Disabled",
+                            "pickHostNameFromBackendAddress": true,
+                            "affinityCookieName": "ApplicationGatewayAffinity",
+                            "path": "/redcap/srvrs/prod_v3_1_0_001/redcap/",
+                            "requestTimeout": 20
+                        }
+                    },
+                    {
+                        "name": "app-service-settings",
+                            "properties": {
+                                "port": 443,
+                                "protocol": "Https",
+                                "cookieBasedAffinity": "Disabled",
+                                "hostName": "[variables('appServiceHostName')]",
+                                "pickHostNameFromBackendAddress": false,
+                                "path": "/",
+                                "requestTimeout": 20
+                            }                        
+                    },
+                    {
+                        "name": "dev-setting",
+                        "properties": {
+                            "port": 443,
+                            "protocol": "Https",
+                            "cookieBasedAffinity": "Disabled",
+                            "pickHostNameFromBackendAddress": true,
+                            "affinityCookieName": "ApplicationGatewayAffinity",
+                            "path": "/redcap/srvrs/dev_v3_1_0_001/redcap/",
+                            "requestTimeout": 20
+                        }
+                    },
+                    {
+                        "name": "well-known",
+                        "properties": {
+                            "port": 443,
+                            "protocol": "Https",
+                            "cookieBasedAffinity": "Disabled",
+                            "pickHostNameFromBackendAddress": true,
+                            "path": "/.well-known/",
+                            "requestTimeout": 20
+                        }
+                    }
+                ],
+                "httpListeners": [
+                    {
+                        "name": "http-listener",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/frontendIPConfigurations/appGwPublicFrontendIp')]"
+                            },
+                            "frontendPort": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/frontendPorts/port_80')]"
+                            },
+                            "protocol": "Http",
+                            "hostNames": [],
+                            "requireServerNameIndication": false
+                        }
+                    },
+                    {
+                        "name": "https-listener",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/frontendIPConfigurations/appGwPublicFrontendIp')]"
+                            },
+                            "frontendPort": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/frontendPorts/port_443')]"
+                            },
+                            "protocol": "Https",
+                            "sslCertificate": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/sslCertificates/gateway-ip-cert')]"
+                            },
+                            "hostNames": [],
+                            "requireServerNameIndication": false
+                        }
+                    }
+                ],
+                "urlPathMaps": [
+                    {
+                        "name": "main-rule",
+                        "properties": {
+                            "defaultBackendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendAddressPools/appservices')]"
+                            },
+                            "defaultBackendHttpSettings": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendHttpSettingsCollection/app-service-settings')]"
+                            },
+                            "pathRules": [
+                                {
+                                    "name": "Dev",
+                                    "properties": {
+                                        "paths": [
+                                            "/redcap/srvrs/dev_v3_1_0_001/redcap/",
+                                            "/redcap/srvrs/dev_v3_1_0_001/redcap/*"
+                                        ],
+                                        "backendAddressPool": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendAddressPools/redcap')]"
+                                        },
+                                        "backendHttpSettings": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendHttpSettingsCollection/dev-setting')]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "Prod",
+                                    "properties": {
+                                        "paths": [
+                                            "/redcap/srvrs/prod_v3_1_0_001/redcap/",
+                                            "/redcap/srvrs/prod_v3_1_0_001/redcap/*"
+                                        ],
+                                        "backendAddressPool": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendAddressPools/redcap')]"
+                                        },
+                                        "backendHttpSettings": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendHttpSettingsCollection/prod-settings')]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "default",
+                                    "properties": {
+                                        "paths": [
+                                            "/redcap/*",
+                                            "/redcap",
+                                            "/redcap/current"
+                                        ],
+                                        "backendAddressPool": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendAddressPools/appservices')]"
+                                        },
+                                        "backendHttpSettings": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendHttpSettingsCollection/app-service-settings')]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "home",
+                                    "properties": {
+                                        "paths": [
+                                            "/*"
+                                        ],
+                                        "backendAddressPool": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendAddressPools/appservices')]"
+                                        },
+                                        "backendHttpSettings": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendHttpSettingsCollection/app-service-settings')]"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "https-redirect",
+                        "properties": {
+                            "defaultRedirectConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/redirectConfigurations/https-redirect')]"
+                            },
+                            "pathRules": [
+                                {
+                                    "name": "https-redirect",
+                                    "properties": {
+                                        "paths": [
+                                            "/*"
+                                        ],
+                                        "redirectConfiguration": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/redirectConfigurations/https-redirect_https-redirect')]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "well-known-exclusion",
+                                    "properties": {
+                                        "paths": [
+                                            "/.well-known/*"
+                                        ],
+                                        "backendAddressPool": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendAddressPools/appservices')]"
+                                        },
+                                        "backendHttpSettings": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/backendHttpSettingsCollection/well-known')]"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "requestRoutingRules": [
+                    {
+                        "name": "main-rule",
+                        "properties": {
+                            "ruleType": "PathBasedRouting",
+                            "httpListener": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/httpListeners/https-listener')]"
+                            },
+                            "urlPathMap": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/urlPathMaps/main-rule')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "https-redirect",
+                        "properties": {
+                            "ruleType": "PathBasedRouting",
+                            "httpListener": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/httpListeners/http-listener')]"
+                            },
+                            "urlPathMap": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/urlPathMaps/https-redirect')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [],
+                "rewriteRuleSets": [],
+                "redirectConfigurations": [
+                    {
+                        "name": "https-redirect",
+                        "properties": {
+                            "redirectType": "Permanent",
+                            "targetListener": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/httpListeners/https-listener')]"
+                            },
+                            "includePath": true,
+                            "includeQueryString": true,
+                            "urlPathMaps": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/urlPathMaps/https-redirect')]"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "https-redirect_https-redirect",
+                        "properties": {
+                            "redirectType": "Permanent",
+                            "targetListener": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/httpListeners/https-listener')]"
+                            },
+                            "includePath": true,
+                            "includeQueryString": true,
+                            "pathRules": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/applicationGateways', variables('gatewayName')), '/urlPathMaps/https-redirect/pathRules/https-redirect')]"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "privateLinkConfigurations": [],
+                "enableHttp2": true,
+                "autoscaleConfiguration": {
+                    "minCapacity": 1,
+                    "maxCapacity": 2
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

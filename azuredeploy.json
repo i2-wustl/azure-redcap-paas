@@ -1,11 +1,11 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "siteName": {
+    "envName": {
       "type": "string",
       "metadata": {
-        "description": "Name of azure web app"
+        "description": "What environment are we deploying to"
       }
     },
     "administratorLogin": {
@@ -75,7 +75,10 @@
         "P1",
         "P2",
         "P3",
-        "P4"
+        "P4",
+        "P1V2",
+        "P2V2",
+        "P3V3"
       ],
       "metadata": {
         "description": "Describes plan's pricing tier and capacity - this can be changed after deployment. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
@@ -94,6 +97,13 @@
       "defaultValue": 5120,
       "metadata": {
         "description": "Azure database for MySQL sku Size "
+      }
+    },
+    "databaseBackupRetentionDays": {
+      "type": "int",
+      "defaultValue": 30,
+      "metadata": {
+        "description": "Number of days to keep backups"
       }
     },
     "databaseForMySqlTier": {
@@ -159,13 +169,6 @@
         "description": "The default selected is 'Locally Redundant Storage' (3 copies in one region). See https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy for more information."
       }
     },
-    "storageContainerName": {
-      "type": "string",
-      "defaultValue": "redcap",
-      "metadata": {
-        "description": "Name of the container used to store backing files in the new storage account. This container is created automatically during deployment."
-      }
-    },
     "repoURL": {
       "type": "string",
       "defaultValue": "https://github.com/vanderbilt-redcap/redcap-azure.git",
@@ -182,27 +185,29 @@
     }
   },
   "variables": {
-    "siteName": "[replace(parameters('siteName'), ' ', '')]",
-    "databaseName": "[concat(variables('siteName'), '_db')]",
-    "serverName": "[concat(variables('siteName'), uniqueString(resourceGroup().id))]",
-    "hostingPlanName": "[concat(variables('siteName'), '_serviceplan')]",
-    "sendgridAccountName": "[concat(variables('siteName'), '_sendgrid')]",
-    "webSiteName": "[concat(variables('siteName'), uniqueString(resourceGroup().id))]",
+    "baseName": "[concat('i2-redcap-', parameters('envName'))]",
+    "vnetName": "[concat(variables('baseName'), '-vnet')]",
+    "normalizedSiteName": "[replace(replace(variables('baseName'), '-', ''), '_', '')]",
+    "databaseName": "[concat(replace(variables('baseName'), '-', '_'), '_db')]",
+    "serverName": "[concat(variables('baseName'), '-mysql')]", // uniqueString(resourceGroup().id))]",
+    "hostingPlanName": "[concat(variables('baseName'), '-serviceplan')]",
+    "webSiteName": "[concat(variables('baseName'), '-web')]", // uniqueString(resourceGroup().id))]",
     "tierSymbol": {
       "Basic": "B",
       "GeneralPurpose": "GP",
       "MemoryOptimized": "MO"
     },
     "databaseForMySqlSku": "[concat(variables('tierSymbol')[parameters('databaseForMySqlTier')], '_', parameters('databaseForMySqlFamily'), '_', parameters('databaseForMySqlCores'))]",
-    "storageName": "[concat('storage', uniqueString(resourceGroup().id))]",
-    "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('storageName'))]"
+    "storageName": "[concat(variables('normalizedSiteName'), 'storage')]", //"[concat('storage', uniqueString(resourceGroup().id))]",
+    "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', variables('storageName'))]",
+    "storageContainerName": "[variables('normalizedSiteName')]" // "[concat(variables('normalizedSiteName'), 'container')]"
   },
   "resources": [
     {
       "name": "[variables('storageName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
-      "apiVersion": "2016-01-01",
+      "apiVersion": "2021-01-01",
       "sku": {
         "name": "[parameters('storageType')]"
       },
@@ -213,7 +218,7 @@
       "kind": "Storage"
     },
     {
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-02-01",
       "name": "[variables('hostingPlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
@@ -229,7 +234,7 @@
       }
     },
     {
-      "apiVersion": "2016-08-01",
+      "apiVersion": "2020-12-01",
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
@@ -243,9 +248,21 @@
       "properties": {
         "name": "[variables('webSiteName')]",
         "serverFarmId": "[variables('hostingPlanName')]",
+        "virtualNetworkSubnetId": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('vnetName')), '2018-03-01').subnets[0].id]",
+        "httpsOnly": true,
         "siteConfig": {
           "phpVersion": "7.3",
           "alwaysOn": true,
+          "http20Enabled": true,
+          "defaultDocuments": [
+            "landing.php",
+            "Default.htm",
+            "Default.html",
+            "index.htm",
+            "index.html",
+            "index.php"
+          ],
+          "vnetRouteAllEnabled": true,
           "connectionStrings": [
             {
               "name": "defaultConnection",
@@ -256,7 +273,7 @@
           "appSettings": [
             {
               "Name": "StorageContainerName",
-              "Value": "[parameters('storageContainerName')]"
+              "Value": "[variables('storageContainerName')]"
             },
             {
               "Name": "StorageAccount",
@@ -309,6 +326,10 @@
             {
               "Name": "smtp_password",
               "value": "[parameters('smtpPassword')]"
+            },
+            {
+              "Name": "VersionApiKey",
+              "Value": "--Replace with token from REDCap--"
             }
           ]
         }
@@ -318,7 +339,7 @@
           "name": "web",
           "type": "sourcecontrols",
           "location": "[resourceGroup().location]",
-          "apiVersion": "2015-08-01",
+          "apiVersion": "2018-11-01",
           "dependsOn": [
             "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
             "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'))]"
@@ -334,6 +355,45 @@
         }
       ]
     },
+    // {
+    //   "type": "Microsoft.Web/sites/virtualNetworkConnections",
+    //   "apiVersion": "2020-12-01",
+    //   "name": "[concat(variables('webSiteName'), '/ab09b250-108b-4663-8f2f-1bc99074a5c5_default')]",
+    //   "location": "Central US",
+    //   "dependsOn": [
+    //     "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
+    //   ],
+    //   "properties": {
+    //     "vnetResourceId": "[concat(variables('siteName'), '-vnet/subnets/default')]",
+    //     "isSwift": true
+    //   }
+    // },
+    // {
+    //   "apiVersion": "2015-08-01",
+    //   "name": "[concat(concat(variables('websiteName'), '.azurewebsites.net'),'/',variables('domainName'))]",
+    //   "type": "Microsoft.Web/sites/hostNameBindings",
+    //   "location": "[resourceGroup().location]",
+    //   "properties": {
+    //     "domainId": null,
+    //     "hostNameType": "Verified",
+    //     "siteName": "i2-redcap-qa-web.azurewebsites.net"
+    //   }
+    // },
+    // {
+    //   "type": "Microsoft.Web/sites/config",
+    //   "apiVersion": "2018-11-01",
+    //   "name": "[concat(resourceGroup().name, '/web')]",
+    //   "location": "Central US",
+    //   "dependsOn": [
+    //     "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
+    //   ],
+    //   "tags": {
+    //     "displayName": "WebApp"
+    //   },
+    //   "properties": {
+    //     "minTlsVersion": "1.2"
+    //   }
+    // },
     {
       "apiVersion": "2017-12-01-preview",
       "location": "[resourceGroup().location]",
@@ -342,12 +402,13 @@
         "displayName": "MySQLAzure"
       },
       "properties": {
+        "createMode": "Default",
         "version": "[parameters('mysqlVersion')]",
         "administratorLogin": "[parameters('administratorLogin')]",
         "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
         "storageProfile": {
           "storageMB": "[parameters('databaseSkuSizeMB')]",
-          "backupRetentionDays": "7",
+          "backupRetentionDays": "[parameters('databaseBackupRetentionDays')]",
           "geoRedundantBackup": "Disabled"
         },
         "sslEnforcement": "Disabled"
@@ -385,6 +446,18 @@
           "dependsOn": [
             "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'))]"
           ]
+        },
+        {
+          "type": "Microsoft.DBForMySQL/servers/virtualNetworkRules",
+          "apiVersion": "2017-12-01",
+          "name": "[concat(variables('serverName'), '/vnet')]",
+          "dependsOn": [
+            "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'))]"
+          ],
+          "properties": {
+            "virtualNetworkSubnetId": "[reference(resourceId('Microsoft.Network/virtualNetworks', variables('vnetName')), '2018-03-01').subnets[0].id]",
+            "ignoreMissingVnetServiceEndpoint": false
+          }
         }
       ]
     }
@@ -412,7 +485,7 @@
     },
     "storageContainerName": {
       "type": "string",
-      "value": "[parameters('storageContainerName')]"
+      "value": "[variables('storageContainerName')]"
     }
   }
 }

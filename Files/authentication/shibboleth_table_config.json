@@ -1,0 +1,12 @@
+{
+    "splash_default": "inst-login0",
+    "table_login_option": "Use local REDCap login",
+    "institutions": [
+        {
+            "login_option": "WUSTL Key Login",
+            "login_text": "Click the image below to login using WUSTL Key",
+            "login_image": "https:\/\/connect.wustl.edu\/selfservice\/images\/ConnectLogoTransparent.png",
+            "login_url": "\/.auth\/login\/aad?post_login_redirect_url=\/redcap\/index.php"
+        }
+    ]
+}

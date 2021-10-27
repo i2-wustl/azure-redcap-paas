@@ -54,6 +54,10 @@ function Main {
             Log("Moving files to web root")
 			MoveFiles
 
+			# copy app files to wwwroot
+            Log("Moving landing page files to web root")
+			MoveLandingPageFiles
+
 			# initialize PHP_INI_SYSTEM settings
 			# https://docs.microsoft.com/en-us/azure/app-service/web-sites-php-configure#changing-phpinisystem-configuration-settings
 			Log("Updating PHP and sendmail settings")
@@ -124,7 +128,7 @@ function ApplySchema {
 }
 
 function UpdateConfig {
-	Log("Updating site configuration in database")
+	Log("Updating site configuration in database: $env:APPSETTING_DBName")
 
 	CallSql -Query "UPDATE $($env:APPSETTING_DBName).redcap_config SET value ='https://$($env:WEBSITE_HOSTNAME)/' WHERE field_name = 'redcap_base_url';"
 
@@ -185,7 +189,7 @@ function UpdatePHPSettings {
 
 function UpdateDBConnection {
     $dbFilename = "$webRoot\database.php"
-    Log("Updating $dbFilename with assigned variables")
+    Log("Updating $dbFilename with assigned variables for $env:APPSETTING_DBHostName")
 	$bytes = New-Object Byte[] 8
 	$rand = [System.Security.Cryptography.RandomNumberGenerator]::Create()
 	$rand.GetBytes($bytes)
@@ -220,6 +224,17 @@ function GetSQLSchema {
 
 function MoveFiles {
     $source = "$path\target\$version\redcap"
+    $dest = $webRoot
+    $what = @("*.*","/E","/MOVE","/NFL","/NDL","NJH","NP","/LOG+:`"$logFile`"")
+
+    $cmdArgs = @("$source","$dest",$what)
+    robocopy @cmdArgs
+
+    Log("RoboCopy output: $($rcOutput[$LASTEXITCODE])")
+}
+
+function MoveLandingPageFiles {	
+    $source = "$path\Files\LandingPage"
     $dest = $webRoot
     $what = @("*.*","/E","/MOVE","/NFL","/NDL","NJH","NP","/LOG+:`"$logFile`"")
 

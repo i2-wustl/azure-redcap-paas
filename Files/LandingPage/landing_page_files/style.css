@@ -1,0 +1,560 @@
+/*
+Theme Name:  WUSM
+Theme URI:   http://medicine.wustl.edu
+Description: Base theme for School of Medicine sites
+Author:      Medical Public Affairs
+Author URI:  http://medicine.wustl.edu
+Version:	 2016.12.01.0
+License:     GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* # Table of Contents
+----------------------------------------------------------------
+
+# General
+# Header
+	## Navigation
+	## Mobile Navigation
+# Body
+	## Homepage
+	## Featured Image (Home)
+	## Featured Image (Page)
+	## Left Column
+	## Content
+		### Callout
+		### Accordion
+		### Cards
+	## Search Results
+	## Misc
+# Footer
+# Media Queries
+# Print Styles
+
+--------------------------------------------------------------*/
+
+
+/* # General
+--------------------------------------------------------------*/
+html, body, body div, span, h1, p, img, small, sup, var, b, ul, li, fieldset, legend, footer, header, nav {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+ footer, header, nav {display: block;}
+
+/* # Responsive images and other embedded objects
+   Note: keeping IMG here will cause problems if you're using foreground images as sprites.
+   If this default setting for images is causing issues, you might want to replace it with a .responsive class instead. */
+
+img {max-width: 100%;height:auto;}
+
+/* # force a vertical scrollbar to prevent a jumpy page */
+html {overflow-y: scroll;}
+
+/* # we use a lot of ULs that aren't bulleted.
+	don't forget to restore the bullets within content. */
+ul {list-style: none;}
+
+a {margin: 0; padding: 0; font-size: 100%; vertical-align: baseline; background: transparent;}
+
+/* # tables still need cellspacing="0" in the markup */
+
+input {vertical-align: middle;}
+
+ input {font: 99% 'Open Sans',sans-serif;}
+
+small {font-size: 85%;}
+
+/* # Make sure sup and sub don't screw with your line-heights
+	gist.github.com/413930 */
+ sup {font-size: 75%; line-height: 0; position: relative;}
+sup {top: -0.5em;}
+
+/* # standardize any monospaced elements */
+
+/* # hand cursor on clickable elements */
+
+input[type=button],
+button {cursor: pointer;}
+
+/* # Webkit browsers add a 2px margin outside the chrome of form elements */
+button, input {margin: 0;}
+
+/* # make buttons play nice in IE */
+button,
+input[type=button] {width: auto; overflow: visible;}
+
+/* # scale images in IE7 more attractively */
+
+/* # let's clear some floats */
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+/* # Hide only visually, but have it available for screenreaders */
+/* https://make.wordpress.org/accessibility/2015/02/09/hiding-text-for-screen-readers-with-wordpress-core/ */
+
+html {
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	color: #333;
+}
+
+a {
+	color: #990000;
+	text-decoration: none;
+}
+
+a:hover,
+a:focus {
+	color: #717171;
+}
+
+
+/* # Header
+--------------------------------------------------------------*/
+#header-logo-row {
+	background-color: #fff;
+}
+
+.wrapper {
+	margin: 0 auto;
+	max-width: 960px;
+	position: relative;
+}
+
+#header-logo {
+	float: left;
+	margin: 13px 0 10px 10px;
+}
+
+#header-logo a {
+	display: block;
+}
+
+#header-logo img {
+	display: block;
+	height: auto;
+}
+
+#utility-bar {
+	float: right;
+}
+
+#utility-nav {
+	list-style-type: none;
+	margin-top: 6px;
+}
+
+#utility-nav li {
+	float: left;
+	padding: 7px 15px;
+	border-right: 1px solid #e8e8e8;
+}
+
+#utility-nav li.last-child {
+	border: none;
+}
+
+#utility-nav li a {
+	color: #999;
+	font-size: 11px;
+	text-transform: uppercase;
+}
+
+#utility-nav li a:hover {
+	color: #990000;
+}
+
+
+/* ## Navigation
+--------------------------------------------------------------*/
+
+
+/* ## Mobile Navigation
+--------------------------------------------------------------*/
+
+
+/* # Body
+--------------------------------------------------------------*/
+#main {
+	position: relative;
+}
+
+
+/* ## Homepage
+--------------------------------------------------------------*/
+
+
+/* ## Featured Image Home
+--------------------------------------------------------------*/
+
+
+/* ## Featured Image (Pages)
+--------------------------------------------------------------*/
+
+
+/* ## Left Column
+--------------------------------------------------------------*/
+
+
+/* ## Content
+--------------------------------------------------------------*/
+
+
+/* ### Callout
+--------------------------------------------------------------*/
+
+
+/* ### Accordion
+--------------------------------------------------------------*/
+
+
+/* ### Cards
+--------------------------------------------------------------*/
+
+
+/* ### General Module Styles
+--------------------------------------------------------------*/
+
+
+/* ## Search Results
+--------------------------------------------------------------*/
+
+
+/* ## Misc
+--------------------------------------------------------------*/
+
+
+/* # Footer
+--------------------------------------------------------------*/
+footer {
+	clear: both;
+}
+
+#site-footer {
+	background-color: #dedede;
+	overflow: auto;
+}
+
+#site-footer-bottom {
+	margin: 0 10px;
+	padding: 30px 0;
+}
+
+#site-footer-bottom #col1 {
+	float: left;
+	width: 440px;
+	max-width: 440px;
+	padding-right: 20px;
+	line-height: 24px;
+}
+
+#site-footer-bottom #col1 p {
+	padding-bottom: 15px;
+}
+
+#site-footer-bottom #col1 p:last-child {
+	padding-bottom: 0px;
+}
+
+#site-footer #site-footer-bottom > div:only-child {
+	width: auto;
+	max-width: none;
+}
+
+#wusm-footer {
+	color: #dedede;
+	background-color: #333;
+	padding-bottom: 15px;
+}
+
+#wusm-footer a {
+	color: #dedede;
+}
+
+#wusm-footer-left {
+	float: left;
+	margin-left: 10px;
+	padding-top: 20px;
+}
+
+#wusm-footer-left a {
+	display: inline-block;
+}
+
+#wusm-footer-left img {
+	display: block;
+}
+
+#copyright {
+	font-size: 12px;
+	margin-top: 10px;
+}
+
+#copyright a {
+	color: #767676;
+}
+
+#wusm-footer-right {
+	margin-right: 10px;
+	padding-top: 20px;
+	float: right;
+}
+
+#wusm-social {
+	float: right;
+}
+
+#wusm-social a {
+	width: 23px;
+	height: 23px;
+}
+
+a#wusm-facebook,
+a#wusm-twitter,
+a#wusm-flickr {
+	display: inline-block;
+	margin-left: 8px;
+}
+
+a#wusm-facebook img,
+a#wusm-twitter img,
+a#wusm-flickr img {
+	opacity: 0.8;
+}
+
+a#wusm-facebook {
+	background: #5c5c5c;
+}
+
+a#wusm-facebook:hover {
+	background: #3b5998;
+}
+
+a#wusm-facebook:hover img {
+	opacity: 1;
+}
+
+a#wusm-twitter {
+	background: #5c5c5c;
+}
+
+a#wusm-twitter:hover {
+	background: #55acee;
+}
+
+a#wusm-twitter:hover img {
+	opacity: 1;
+}
+
+a#wusm-flickr {
+	background: #5c5c5c;
+}
+
+a#wusm-flickr:hover {
+	background: #0063dc;
+}
+
+a#wusm-flickr:hover img {
+	opacity: 1;
+}
+
+#wusm-footer-right nav {
+	float: right;
+	clear: right;
+	margin-top: 10px;
+}
+
+#wusm-footer-right nav a {
+	text-transform: uppercase;
+	font-size: 11px;
+	display: inline-block;
+	padding: 9px 12px;
+	border-left: 1px solid #191919;
+}
+
+#wusm-footer a:hover {
+	color: #999;
+}
+
+#wusm-footer-right nav a.first-child {
+	border: none;
+}
+
+#wusm-footer-right nav a.last-child {
+	padding-right: 0;
+}
+
+
+/* # Media Queries
+--------------------------------------------------------------*/
+@media screen and (max-width: 970px) {
+
+	.wrapper {
+		max-width: 686px;
+	}
+
+	#header-logo-row .wrapper {
+		position: relative;
+		overflow: hidden;
+	}
+
+	#header-logo {
+		width: 100%;
+		margin: 13px 0 10px;
+	}
+
+	#header-logo img {
+		padding: 0 18px;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+
+	#utility-bar {
+		position: absolute;
+		right: -252px;
+		background-color: #fff;
+	}
+
+	#utility-nav {
+		margin-top: 10px;
+	}
+
+	.wrapper {
+		max-width: 770px;
+	}
+
+	/* Cards
+	--------------------------------------------------------------*/
+
+	/* Footer
+	--------------------------------------------------------------*/
+
+	footer {
+		background-color: #dedede;
+	}
+
+	#site-footer,
+	#wusm-footer-left,
+	#wusm-footer-right {
+		padding-left: 35px;
+		padding-right: 35px;
+	}
+
+	#site-footer {
+		padding-top: 25px;
+		padding-bottom: 25px;
+		max-width: 670px;
+		margin: 0 auto;
+	}
+
+	#site-footer-bottom {
+		margin: 20px 10px 0;
+		padding: 0;
+	}
+
+	#site-footer-bottom #col1 {
+		float: none;
+		width: auto;
+		padding: 0 0 20px;
+		margin-bottom: 20px;
+		border-bottom: 1px solid #bcbcbc;
+	}
+
+	#site-footer #site-footer-bottom > div:only-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	#wusm-footer-left {
+		padding-top: 22px;
+	}
+
+	#wusm-footer-left {
+		float: none;
+		text-align: center;
+		margin: 0;
+		padding-top: 18px;
+	}
+
+	#wusm-footer-right {
+		margin-right: 0;
+		padding-top: 20px;
+		text-align: center;
+		float: none;
+	}
+
+	#wusm-social {
+		float: none;
+	}
+
+	#wusm-social a {
+		width: 30px;
+		height: 30px;
+	}
+
+	a#wusm-facebook {
+		margin-left: 0;
+	}
+
+	#wusm-social img {
+		width: 30px;
+		height: 30px;
+	}
+
+	#wusm-footer-right nav {
+		float: none;
+		clear: none;
+		margin-top: 17px;
+	}
+
+	#wusm-footer-right nav a.last-child {
+		padding-right: 12px;
+	}
+
+}
+
+@media screen and (max-width: 520px) {
+
+	#site-footer,
+	#wusm-footer-left,
+	#wusm-footer-right {
+		width: 80%;
+		padding-left: 10%;
+		padding-right: 10%;
+	}
+
+}
+
+
+/* # Print Styles
+--------------------------------------------------------------*/
+@media print {
+
+	#utility-bar,
+	#wusm-footer {
+		display: none;
+	}
+
+	
+	#site-footer {
+		background-color: #fff;
+	}
+
+	#site-footer-bottom {
+		margin-left: 35px;
+	}
+
+}

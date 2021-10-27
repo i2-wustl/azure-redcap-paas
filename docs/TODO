@@ -1,0 +1,5 @@
+TODO: consider moving this to the template:
+- assign certificate to the app service
+- auth settings
+    - allow unauth
+    - aad

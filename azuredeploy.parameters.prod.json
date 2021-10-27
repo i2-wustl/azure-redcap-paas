@@ -2,41 +2,38 @@
   "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "siteName": {
-      "value": null
+    "envName": {
+      "value": "prod"
     },
     "administratorLogin": {
-      "value": null
-    },
-    "administratorLoginPassword": {
-      "value": null
+      "value": "i2admin"
     },
     "redcapAppZip": {
-      "value": null
+      "value": "https://generali2wustldiag.blob.core.windows.net/temp/redcap9.5.5.zip"
     },
     "fromEmailAddress": {
-      "value": null
+      "value": "redcap@wustl.edu"
     },
     "smtpFQDN": {
-      "value": null
+      "value": "rsmtp.wustl.edu"
     },
     "smtpUser": {
-      "value": null
+      "value": "null"
     },
     "smtpPassword": {
-      "value": null
+      "value": "null"
     },
     "smtpPort": {
       "value": 587
     },
     "skuName": {
-      "value": "S1"
+      "value": "P2V2"
     },
     "skuCapacity": {
       "value": 1
     },
     "databaseSkuSizeMB": {
-      "value": 5120
+      "value": 	716800
     },
     "databaseForMySqlTier": {
       "value": "GeneralPurpose"
@@ -53,14 +50,11 @@
     "storageType": {
       "value": "Standard_LRS"
     },
-    "storageContainerName": {
-      "value": "redcap"
-    },
     "repoURL": {
-      "value": "https://github.com/vanderbilt-redcap/redcap-azure.git"
+      "value": "https://github.com/i2-wustl/azure-redcap-paas.git"
     },
     "branch": {
-      "value": "master"
+      "value": "release/poc"
     }
   }
 }
